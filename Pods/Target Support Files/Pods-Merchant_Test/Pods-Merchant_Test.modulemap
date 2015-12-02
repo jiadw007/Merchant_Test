@@ -1,0 +1,6 @@
+framework module Pods_Merchant_Test {
+  umbrella header "Pods-Merchant_Test-umbrella.h"
+
+  export *
+  module * { export * }
+}

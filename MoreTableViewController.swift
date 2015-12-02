@@ -12,7 +12,7 @@ class MoreTableViewController: UITableViewController {
     
     private struct MoreTableStoryBoard{
     
-        static let staticTestData = ["My Balance", "Total Income", "Deposit Account", "Customer List", "Businees Info", "Employees", "Account Settings", "Shop notice", "Verification", "Help"]
+        static let staticTestData = ["Loyalty Customer List", "Reward/Loyalty Program", "Deposit Account", "Businees Info", "Employees", "Shop notice", "Help & Feedback","Log Out"]
         static let cellReuseIdentifier = "MoreTableCellIndentifier"
         static let segueIdentifier = "MoreDetails"
     

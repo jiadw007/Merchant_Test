@@ -1,0 +1,6 @@
+framework module DIDatepicker {
+  umbrella header "DIDatepicker-umbrella.h"
+
+  export *
+  module * { export * }
+}
