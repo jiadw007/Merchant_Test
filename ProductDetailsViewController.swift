@@ -30,7 +30,7 @@ class ProductDetailsViewController: UIViewController, UITableViewDataSource, UIT
     @IBOutlet weak var reviewTableView: UITableView!
     
     @IBOutlet weak var averagePoints: UILabel!
-    var product: Product!
+    var product: Item!
     
     var rowNum: Int!
     

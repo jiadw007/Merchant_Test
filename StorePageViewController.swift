@@ -14,11 +14,11 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     // TODO: Get store categories
     private var categoriesTest = ["Category 1", "Category 2", "Category 3"]
     
-    var productTestArray = [Product]()
+    var productTestArray = [Item]()
     
     var addNewItemBool = false
     
-    var newItem : Product?
+    var newItem : Item?
     
     @IBOutlet weak var productSegmentedControl: UISegmentedControl!
     
@@ -38,9 +38,9 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
         
         super.viewDidLoad()
         //TODO: Link to product data
-        let product_1 = Product(title: "Red Dragon Roll", description: "Red Dragon Roll", price: "11.99", categoryArray: self.categoriesTest, imageArray: [UIImage(named:"Red Dragon Roll")!, UIImage(named: "Red Dragon Roll")!])
-        let product_2 = Product(title: "Spicy Tuna Roll", description: "Spicy Tuna Roll", price: "7.99", categoryArray: self.categoriesTest, imageArray: [UIImage(named:"Spicy Tuna")!,UIImage(named:"Spicy Tuna")!])
-        let product_3 = Product(title: "Califonia Roll", description: "California Roll", price: "7.99", categoryArray: self.categoriesTest, imageArray: [UIImage(named:"California Roll")!])
+        let product_1 = Item(title: "Red Dragon Roll", description: "Red Dragon Roll", price: "11.99", categoryArray: self.categoriesTest, imageArray: [UIImage(named:"Red Dragon Roll")!, UIImage(named: "Red Dragon Roll")!])
+        let product_2 = Item(title: "Spicy Tuna Roll", description: "Spicy Tuna Roll", price: "7.99", categoryArray: self.categoriesTest, imageArray: [UIImage(named:"Spicy Tuna")!,UIImage(named:"Spicy Tuna")!])
+        let product_3 = Item(title: "Califonia Roll", description: "California Roll", price: "7.99", categoryArray: self.categoriesTest, imageArray: [UIImage(named:"California Roll")!])
         let product_4 = product_1
         let product_5 = product_2
         let product_6 = product_3

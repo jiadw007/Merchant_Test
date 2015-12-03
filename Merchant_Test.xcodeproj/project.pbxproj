@@ -52,10 +52,15 @@
 		DB7948EC1C0F7BB900969F40 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB7948EA1C0F7BB900969F40 /* Parse.framework */; };
 		DB7948EE1C0F7BC400969F40 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB7948ED1C0F7BC400969F40 /* MobileCoreServices.framework */; };
 		DB7948F01C0F7BDC00969F40 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB7948EF1C0F7BDC00969F40 /* Foundation.framework */; };
+		DB7948F31C0F801A00969F40 /* MerchnatDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7948F21C0F801A00969F40 /* MerchnatDataService.swift */; };
+		DB7948F51C0F931200969F40 /* ItemCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7948F41C0F931200969F40 /* ItemCategory.swift */; };
+		DB7948F71C0F972B00969F40 /* ItemPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7948F61C0F972B00969F40 /* ItemPicture.swift */; };
+		DB7948F91C0F9CCB00969F40 /* StoreCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7948F81C0F9CCB00969F40 /* StoreCategory.swift */; };
+		DB7948FD1C10025400969F40 /* MerchantBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7948FC1C10025400969F40 /* MerchantBaseModel.swift */; };
 		DB9A58381BE90F08006C9804 /* StorePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A58371BE90F08006C9804 /* StorePageViewController.swift */; };
 		DB9A583A1BE91234006C9804 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A58391BE91234006C9804 /* CategoryViewController.swift */; };
 		DB9A583C1BE91274006C9804 /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A583B1BE91274006C9804 /* NewItemViewController.swift */; };
-		DB9A583E1BE95EFF006C9804 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A583D1BE95EFF006C9804 /* Product.swift */; };
+		DB9A583E1BE95EFF006C9804 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A583D1BE95EFF006C9804 /* Item.swift */; };
 		DB9A58401BE95F20006C9804 /* ProductCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A583F1BE95F20006C9804 /* ProductCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -129,10 +134,15 @@
 		DB7948EA1C0F7BB900969F40 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = "Pods/../build/Debug-iphoneos/Parse.framework"; sourceTree = "<group>"; };
 		DB7948ED1C0F7BC400969F40 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		DB7948EF1C0F7BDC00969F40 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DB7948F21C0F801A00969F40 /* MerchnatDataService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchnatDataService.swift; sourceTree = "<group>"; };
+		DB7948F41C0F931200969F40 /* ItemCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCategory.swift; sourceTree = "<group>"; };
+		DB7948F61C0F972B00969F40 /* ItemPicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemPicture.swift; sourceTree = "<group>"; };
+		DB7948F81C0F9CCB00969F40 /* StoreCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreCategory.swift; sourceTree = "<group>"; };
+		DB7948FC1C10025400969F40 /* MerchantBaseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MerchantBaseModel.swift; sourceTree = "<group>"; };
 		DB9A58371BE90F08006C9804 /* StorePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorePageViewController.swift; sourceTree = "<group>"; };
 		DB9A58391BE91234006C9804 /* CategoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		DB9A583B1BE91274006C9804 /* NewItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
-		DB9A583D1BE95EFF006C9804 /* Product.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		DB9A583D1BE95EFF006C9804 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		DB9A583F1BE95F20006C9804 /* ProductCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCollectionViewCell.swift; sourceTree = "<group>"; };
 		EC8A6DDCFF83A5EDBE05664C /* Pods-Merchant_Test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Merchant_Test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Merchant_Test/Pods-Merchant_Test.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,11 +203,15 @@
 		DB395E751BEB0776004343DC /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DB395E731BEB0768004343DC /* Store.swift */,
-				DB9A583D1BE95EFF006C9804 /* Product.swift */,
 				DB395E711BEB04BE004343DC /* Review.swift */,
 				DB1D743A1BE85D86008F23ED /* Alert.swift */,
 				DB65D4CD1BE7FDA700957E53 /* Order.swift */,
+				DB9A583D1BE95EFF006C9804 /* Item.swift */,
+				DB395E731BEB0768004343DC /* Store.swift */,
+				DB7948F61C0F972B00969F40 /* ItemPicture.swift */,
+				DB7948F81C0F9CCB00969F40 /* StoreCategory.swift */,
+				DB7948F41C0F931200969F40 /* ItemCategory.swift */,
+				DB7948FC1C10025400969F40 /* MerchantBaseModel.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -228,6 +242,7 @@
 				DB9A58391BE91234006C9804 /* CategoryViewController.swift */,
 				DB65D4C51BE7085900957E53 /* OrderPageViewController.swift */,
 				DB65D4C31BE6C63D00957E53 /* MoreTableViewController.swift */,
+				DB7948F11C0F7E8300969F40 /* Parse Data Service */,
 				DB395E7A1BEBDB5F004343DC /* Table Cell */,
 				DB395E751BEB0776004343DC /* Model */,
 				DB65D4941BE6BEEF00957E53 /* Merchant_Test */,
@@ -281,6 +296,14 @@
 				DB65D4B71BE6BEF000957E53 /* Info.plist */,
 			);
 			path = Merchant_TestUITests;
+			sourceTree = "<group>";
+		};
+		DB7948F11C0F7E8300969F40 /* Parse Data Service */ = {
+			isa = PBXGroup;
+			children = (
+				DB7948F21C0F801A00969F40 /* MerchnatDataService.swift */,
+			);
+			name = "Parse Data Service";
 			sourceTree = "<group>";
 		};
 		E40108F4DD6A0C29FE184525 /* Frameworks */ = {
@@ -503,12 +526,17 @@
 				DB9A583C1BE91274006C9804 /* NewItemViewController.swift in Sources */,
 				DB395E771BEB0C42004343DC /* ProductDetailsViewController.swift in Sources */,
 				DB65D4C41BE6C63D00957E53 /* MoreTableViewController.swift in Sources */,
+				DB7948F31C0F801A00969F40 /* MerchnatDataService.swift in Sources */,
 				DB65D4CC1BE7F97C00957E53 /* OrderTableCell.swift in Sources */,
-				DB9A583E1BE95EFF006C9804 /* Product.swift in Sources */,
+				DB7948F91C0F9CCB00969F40 /* StoreCategory.swift in Sources */,
+				DB9A583E1BE95EFF006C9804 /* Item.swift in Sources */,
+				DB7948F71C0F972B00969F40 /* ItemPicture.swift in Sources */,
 				DB65D4C81BE7ABA800957E53 /* AlertTableCell.swift in Sources */,
 				DB395E741BEB0768004343DC /* Store.swift in Sources */,
 				DB65D4C61BE7085900957E53 /* OrderPageViewController.swift in Sources */,
+				DB7948FD1C10025400969F40 /* MerchantBaseModel.swift in Sources */,
 				DB395E7E1BEBDDD8004343DC /* ItemPicCollectionViewCell.swift in Sources */,
+				DB7948F51C0F931200969F40 /* ItemCategory.swift in Sources */,
 				DB395E721BEB04BE004343DC /* Review.swift in Sources */,
 				DB395E841BEFDDF5004343DC /* CategoryTableViewCell.swift in Sources */,
 				DB9A58381BE90F08006C9804 /* StorePageViewController.swift in Sources */,

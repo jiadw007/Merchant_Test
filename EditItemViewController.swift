@@ -25,7 +25,7 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var itemTableView: UITableView!
     
-    var product: Product!
+    var product: Item!
     
     let picker = UIImagePickerController()
     

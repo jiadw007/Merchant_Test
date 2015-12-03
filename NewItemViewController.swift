@@ -117,7 +117,7 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
             let description = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
             var price = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ItemAttTableViewCell)?.details.text
             price = price?.substringFromIndex((price?.startIndex)!.advancedBy(1))
-            let product = Product(title: title!, description: description!, price: price, categoryArray: categoriesTest, imageArray: picArray)
+            let product = Item(title: title!, description: description!, price: price, categoryArray: categoriesTest, imageArray: picArray)
             if let spvc = segue.destinationViewController as? StorePageViewController{
             
                 spvc.newItem = product
