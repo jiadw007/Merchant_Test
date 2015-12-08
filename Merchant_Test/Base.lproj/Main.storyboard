@@ -971,7 +971,7 @@
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="VrO-72-xzS">
                                                                     <rect key="frame" x="0.0" y="0.0" width="60" height="51"/>
                                                                     <subviews>
-                                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="5917C201-805C-4B3E-A6D1-43B4F7A60AFE" translatesAutoresizingMaskIntoConstraints="NO" id="KCz-iH-Z8r">
+                                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="B0A6E30E-36BC-467D-83DB-7B2B54D3727D" translatesAutoresizingMaskIntoConstraints="NO" id="KCz-iH-Z8r">
                                                                             <rect key="frame" x="0.0" y="0.0" width="60" height="51"/>
                                                                             <animations/>
                                                                             <constraints>
@@ -1375,7 +1375,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="5917C201-805C-4B3E-A6D1-43B4F7A60AFE" width="184" height="184">
+        <image name="B0A6E30E-36BC-467D-83DB-7B2B54D3727D" width="184" height="184">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA

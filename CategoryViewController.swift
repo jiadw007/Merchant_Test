@@ -16,7 +16,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     
     }
     
-    var categoriesTest = [ItemCategory]()
+    var itemCategoryArray = [ItemCategory]()
 
     @IBOutlet weak var categoryTableView: UITableView!
     
@@ -24,6 +24,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
         
     }
 
@@ -62,12 +63,13 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         return 1
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoriesTest.count
+        return itemCategoryArray.count
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(CategoryStoryboard.categoryCellIdentifier, forIndexPath: indexPath) as! CategoryTableViewCell
         //cell.imageView?.image = UIImage(named: "Warning")
-        //cell.title.text = categoriesTest[indexPath.row]
+        
+        cell.title.text = itemCategoryArray[indexPath.row].name
         cell.listButton.setImage(UIImage(named: "reveal-icon"), forState: .Normal)
         
         return cell
@@ -80,9 +82,11 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete{
-        
-            self.categoriesTest.removeAtIndex(indexPath.row)
             
+            let itemCategory = self.itemCategoryArray[indexPath.row]
+            self.itemCategoryArray.removeAtIndex(indexPath.row)
+            
+            MerchantDataService.deleteItemCategoryInStore(itemCategory)
             self.categoryTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
             
         }

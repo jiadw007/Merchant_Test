@@ -101,6 +101,9 @@ class MerchantDataService {
             return nil
         }
     }
+    
+    // - MARK: Item
+    
     class func findAllItemsInStore() -> [PFObject]{
         if let currentStore = MerchantDataService.findMerchantStore(){
         
@@ -138,37 +141,6 @@ class MerchantDataService {
         return MerchantDataService.queryAllObjects(query)
     
     }
-    class func queryAllObjects(query: PFQuery) -> [PFObject]{
-    
-        //Query
-        var error: NSError? = nil
-        do{
-            let array = try query.findObjects()
-            return array
-        }catch let error1 as NSError{
-            error = error1
-        }
-        if error != nil{
-        
-            print("\(error?.localizedDescription)")
-        }
-        return []
-    }
-    class func fetchImageFile(item: Item) -> PFFile?{
-    
-        let itemPictureArray = MerchantDataService.findAllItemPictureInItem(item)
-        if itemPictureArray.count != 0{
-            
-            if let imageFile = itemPictureArray[0].valueForKey("picture") as? PFFile{
-                
-                return imageFile
-            }
-        
-        }
-        
-        return nil
-    }
-    
     class func addItemPicture(item: Item, itemImage: UIImage){
         
         let itemObject = PFObject(withoutDataWithClassName: "Item", objectId: item.objectId)
@@ -192,7 +164,7 @@ class MerchantDataService {
         
     }
     class func updateItemInStore(item: Item){
-    
+        
         var itemObject = PFObject(withoutDataWithClassName: "Item", objectId: item.objectId)
         itemObject["name"] = item.name
         itemObject["description"] = item.description
@@ -218,6 +190,56 @@ class MerchantDataService {
         query.includeKey("store.category")
         
         return Item.init(pfObj: MerchantDataService.queryAllObjects(query)[0])
+        
+    }
+    class func fetchImageFile(item: Item) -> PFFile?{
+        
+        let itemPictureArray = MerchantDataService.findAllItemPictureInItem(item)
+        if itemPictureArray.count != 0{
+            
+            if let imageFile = itemPictureArray[0].valueForKey("picture") as? PFFile{
+                
+                return imageFile
+            }
+            
+        }
+        
+        return nil
+    }
+    class func queryAllObjects(query: PFQuery) -> [PFObject]{
+    
+        //Query
+        var error: NSError? = nil
+        do{
+            let array = try query.findObjects()
+            return array
+        }catch let error1 as NSError{
+            error = error1
+        }
+        if error != nil{
+        
+            print("\(error?.localizedDescription)")
+        }
+        return []
+    }
+    
+    // - MARK: ItemCategory
+    class func deleteItemCategoryInStore(itemCategory : ItemCategory){
+    
+        let itemCategoryObject = PFObject(withoutDataWithClassName: "ItemCategory", objectId: itemCategory.objectId)
+        var error: NSError? = nil
+        do{
+            let success = try itemCategoryObject.delete()
+            
+        }catch let error1 as NSError{
+            error = error1
+        }
+        if error != nil{
+            
+            print("\(error?.localizedDescription)")
+        }
+    
     
     }
+    
 }

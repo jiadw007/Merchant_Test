@@ -235,9 +235,9 @@
 			children = (
 				DB65D4951BE6BEEF00957E53 /* AppDelegate.swift */,
 				DB65D4991BE6BEEF00957E53 /* Main.storyboard */,
-				DB9A58391BE91234006C9804 /* CategoryViewController.swift */,
 				DB65D4C51BE7085900957E53 /* OrderPageViewController.swift */,
 				DB9A583B1BE91274006C9804 /* NewItemViewController.swift */,
+				DB9A58391BE91234006C9804 /* CategoryViewController.swift */,
 				DB395E811BEF1AA8004343DC /* EditItemViewController.swift */,
 				DB395E761BEB0C42004343DC /* ItemDetailsViewController.swift */,
 				DB9A58371BE90F08006C9804 /* StorePageViewController.swift */,
