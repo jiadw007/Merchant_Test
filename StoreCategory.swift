@@ -13,10 +13,10 @@ class StoreCategory : MerchantBaseModel{
 
     var name: String!
     
-    
     override init(pfObj: PFObject){
     
         super.init(pfObj: pfObj)
+    
         self.name = pfObj["name"] as! String
         
     }

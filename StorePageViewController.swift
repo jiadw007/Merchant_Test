@@ -7,57 +7,61 @@
 //
 
 import UIKit
+import Parse
 
 class StorePageViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     
-    // TODO: Get store categories
-    private var categoriesTest = ["Category 1", "Category 2", "Category 3"]
+    // TODO: Get all item categories in store
     
-    var productTestArray = [Item]()
+    var itemCategoriesArray = [ItemCategory]()
+    
+    var itemArray = [Item]()
     
     var addNewItemBool = false
     
     var newItem : Item?
     
-    @IBOutlet weak var productSegmentedControl: UISegmentedControl!
+    //var currentMerchant : PFUser!
+
+    var currentStore: Store!
     
-    @IBOutlet weak var productCollectionView: UICollectionView!
+    @IBOutlet weak var storeLogoImageView: UIImageView!
+    
+    @IBOutlet weak var itemSegmentedControl: UISegmentedControl!
+    
+    @IBOutlet weak var itemCollectionView: UICollectionView!
     
     private struct StorePageStoryBoard{
     
-        static let categorySegueIdentifier = "showCateogries"
+        static let categorySegueIdentifier = "showItemCateogries"
         static let newItemSegueIdentifier = "addNewItem"
-        static let showProductDetailsSegueIdentifier = "showProductDetails"
-        static let productCollectionCellReuseIdentifier = "productCollectionCell"
+        static let showItemDetailsSegueIdentifier = "showItemDetails"
+        static let itemCollectionCellReuseIdentifier = "itemCollectionCell"
     
+    }
+    override func viewWillAppear(animated: Bool) {
+        //TODO: Load all items
+        itemArray = MerchantDataService.findAllItemsInStore().map{Item.init(pfObj: $0)}
+        //TODO: Load all item categories
+        itemCategoriesArray = MerchantDataService.findAllItemCategoriesInStore().map{ItemCategory.init(pfObj: $0)}
+        //TODO: Load current store
+        loadCurrentStore()
+        self.itemCollectionView.reloadData()
+
     }
 
     override func viewDidLoad() {
-        
-        
+    
         super.viewDidLoad()
-        //TODO: Link to product data
-        let product_1 = Item(title: "Red Dragon Roll", description: "Red Dragon Roll", price: "11.99", categoryArray: self.categoriesTest, imageArray: [UIImage(named:"Red Dragon Roll")!, UIImage(named: "Red Dragon Roll")!])
-        let product_2 = Item(title: "Spicy Tuna Roll", description: "Spicy Tuna Roll", price: "7.99", categoryArray: self.categoriesTest, imageArray: [UIImage(named:"Spicy Tuna")!,UIImage(named:"Spicy Tuna")!])
-        let product_3 = Item(title: "Califonia Roll", description: "California Roll", price: "7.99", categoryArray: self.categoriesTest, imageArray: [UIImage(named:"California Roll")!])
-        let product_4 = product_1
-        let product_5 = product_2
-        let product_6 = product_3
-        let product_7 = product_1
-        let product_8 = product_2
-        let product_9 = product_3
-        productTestArray = [product_1, product_2, product_3, product_4, product_5,product_6,product_7,product_8,product_9]
-        
+       
         if addNewItemBool == true && newItem != nil{
         
-            productTestArray.append(newItem!)
+            itemArray.append(newItem!)
             addNewItemBool = false
             newItem = nil
         }
         
-        self.productCollectionView.reloadData()
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,18 +69,62 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
         // Dispose of any resources that can be recreated.
     }
     
+    func loadCurrentStore(){
+    
+        self.currentStore = MerchantDataService.findMerchantStore().map{Store(pfObj: $0)}
+        let imageFile = self.currentStore.logo
+        var error:NSError? = nil
+        do{
+            
+            let image = UIImage(data: try imageFile.getData())
+            dispatch_async(dispatch_get_main_queue()) {
+                if true {
+                    self.storeLogoImageView.image = image
+                }
+            }
+            
+        }catch let error1 as NSError {
+            error = error1
+        }
+        if (error != nil) {
+            print("\(error?.localizedDescription)")
+        }
+    
+    }
+    
     // MARK: - Collection View
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return productTestArray.count
+        return itemArray.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StorePageStoryBoard.productCollectionCellReuseIdentifier, forIndexPath: indexPath) as! ProductCollectionViewCell
-        
-        cell.productImageView.image = self.productTestArray[indexPath.row].imageArray[0]
-        cell.productTitle.text = self.productTestArray[indexPath.row].title
-        cell.productPrice.text = "$\(self.productTestArray[indexPath.row].price)"
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StorePageStoryBoard.itemCollectionCellReuseIdentifier, forIndexPath: indexPath) as! ItemCollectionViewCell
+        let item = self.itemArray[indexPath.row]
+        if let imageFile = MerchantDataService.fetchImageFile(item){
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                
+                var error:NSError? = nil
+                do{
+                    
+                    let image = UIImage(data: try imageFile.getData())
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if true {
+                            cell.itemImageView.image = image
+                        }
+                    }
+                    
+                }catch let error1 as NSError {
+                    error = error1
+                }
+                if (error != nil) {
+                    print("\(error?.localizedDescription)")
+                }
+                
+            }
+        }
+        cell.itemTitle.text = item.name
+        cell.itemPrice.text = "$\(item.price)"
         return cell
     }
     
@@ -93,7 +141,7 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
             
                 let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
                 navigationItem.backBarButtonItem = backItem
-                dest.categoriesTest = self.categoriesTest
+                dest.categoriesTest = self.itemCategoriesArray
             }
             
         
@@ -105,18 +153,19 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                 dest.navigationItem.leftBarButtonItem = backItem
 
             }
-        }else if segue.identifier == StorePageStoryBoard.showProductDetailsSegueIdentifier {
+        }else if segue.identifier == StorePageStoryBoard.showItemDetailsSegueIdentifier {
             
-            if let dest = segue.destinationViewController as? ProductDetailsViewController{
-                if let productCell = sender as? UICollectionViewCell {
-                    let index = self.productCollectionView.indexPathForCell(productCell)
+            if let dest = segue.destinationViewController as? ItemDetailsViewController{
+                if let itemCell = sender as? UICollectionViewCell {
+                    let index = self.itemCollectionView.indexPathForCell(itemCell)
                     let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
                     navigationItem.backBarButtonItem = backItem
                     
-                    dest.product = productTestArray[(index?.row)!]
-                    print(index?.row)
+                    dest.item = itemArray[(index?.row)!]
+                    dest.storeLogo = self.storeLogoImageView.image
+                    //print(index?.row)
                     dest.rowNum = (index?.row)!
-                    dest.navigationItem.title = dest.product.title
+                    //dest.navigationItem.title = dest.item.name
                 }
                 
             }
@@ -127,6 +176,6 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
         
         print("sdc")
     }
-
+    
 
 }

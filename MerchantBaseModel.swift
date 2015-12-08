@@ -14,14 +14,14 @@ class MerchantBaseModel {
     let objectId : String!
     var createdAt : NSDate!
     var updatedAt : NSDate!
-    var ACL : PFACL!
+    //var ACL : PFACL!
     
     init(pfObj: PFObject){
     
-        self.objectId = pfObj["objectId"] as! String
-        self.createdAt = pfObj["createdAt"] as! NSDate
-        self.updatedAt = pfObj["updatedAt"] as! NSDate
-        self.ACL = pfObj["ACL"] as! PFACL
+        self.objectId = pfObj.objectId
+        self.createdAt = pfObj.createdAt
+        self.updatedAt = pfObj.updatedAt
+        //self.ACL = pfObj.ACL
     
     
     }

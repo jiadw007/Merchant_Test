@@ -16,6 +16,7 @@ class ItemCategory : MerchantBaseModel{
     
     override init(pfObj: PFObject) {
         super.init(pfObj: pfObj)
+        //print(pfObj)
         self.name = pfObj["name"] as! String
         self.store = Store.init(pfObj: pfObj["store"] as! PFObject)
     }

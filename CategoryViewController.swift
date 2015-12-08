@@ -16,7 +16,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     
     }
     
-    var categoriesTest = [String]()
+    var categoriesTest = [ItemCategory]()
 
     @IBOutlet weak var categoryTableView: UITableView!
     
@@ -67,7 +67,7 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(CategoryStoryboard.categoryCellIdentifier, forIndexPath: indexPath) as! CategoryTableViewCell
         //cell.imageView?.image = UIImage(named: "Warning")
-        cell.title.text = categoriesTest[indexPath.row]
+        //cell.title.text = categoriesTest[indexPath.row]
         cell.listButton.setImage(UIImage(named: "reveal-icon"), forState: .Normal)
         
         return cell

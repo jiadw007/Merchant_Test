@@ -12,7 +12,7 @@ class ReviewTableViewCell: UITableViewCell {
     
     
     
-    @IBOutlet weak var customerImage: UIImageView!
+    @IBOutlet weak var userImage: UIImageView!
 
     @IBOutlet weak var reviewTitle: UILabel!
     

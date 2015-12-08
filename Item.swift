@@ -11,21 +11,29 @@ import Parse
 class Item : MerchantBaseModel{
     
     
-    var name: String!
-    var description: String!
-    var price: Double!
-    var isActive : Bool!
+    var name: String! = ""
+    var description: String! = ""
+    var price: Double! = 0.0
+    var isActive : Bool! = true
     var store : Store!
+    var category : ItemCategory!
     
     override init(pfObj: PFObject) {
         super.init(pfObj: pfObj)
+        
         self.name = pfObj["name"] as! String
         self.description = pfObj["description"] as! String
         self.price = pfObj["price"] as! Double
         self.isActive = pfObj["isActive"] as! Bool
         self.store = Store.init(pfObj: pfObj["store"] as! PFObject)
-        
+        self.category = ItemCategory.init(pfObj: pfObj["category"] as! PFObject)
     }
+    
+//    private func getFirstItemPic() -> {
+//    
+//    
+//    
+//    }
     
 //    init(title: String!, description: String!, price: String!, categoryArray: [String], imageArray: [UIImage]){
 //        

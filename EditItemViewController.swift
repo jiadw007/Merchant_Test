@@ -15,22 +15,22 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         
         static let itemAttCellIdentifier = "ItemAttCell"
         static let editItemDoneSegueIdentifier = "EditItemDone"
-        static let itemAttArray = ["Title","Description","Price", "Category"]
+        static let itemAttArray = ["Name","Description","Price", "Category"]
     }
     
     
-    @IBOutlet weak var productImageCollectionView: UICollectionView!
+    @IBOutlet weak var itemImageCollectionView: UICollectionView!
     
     @IBOutlet weak var addItemPicButton: UIButton!
     
     @IBOutlet weak var itemTableView: UITableView!
     
-    var product: Item!
+    var item: Item!
+    
+    var itemPictureArray: [ItemPicture]!
     
     let picker = UIImagePickerController()
     
-    var categoriesTest = ["Category 1", "Category 2", "Category 3"]
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -62,11 +62,11 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         switch indexPath.row{
         
         case 0:
-            cell.details.text = product.title
+            cell.details.text = item.name
         case 1:
-            cell.details.text = product.description
+            cell.details.text = item.description
         case 2:
-            cell.details.text = "$\(product.price)"
+            cell.details.text = "$\(item.price)"
         default:
             cell.details.text = ""
         }
@@ -87,10 +87,9 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        //print(chosenImage)
-        product.imageArray.append(chosenImage)
-        
-        productImageCollectionView.reloadData()
+        MerchantDataService.addItemPicture(item, itemImage: chosenImage)
+        itemPictureArray =  MerchantDataService.findAllItemPictureInItem(item).map{ItemPicture(pfObj: $0)}
+        itemImageCollectionView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)
         
     }
@@ -98,47 +97,85 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    
     // MARK: Collection View
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return product.imageArray.count
+        return itemPictureArray.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = productImageCollectionView.dequeueReusableCellWithReuseIdentifier("ItemPicCollectionViewCell", forIndexPath: indexPath) as! ItemPicCollectionViewCell
+        let cell = itemImageCollectionView.dequeueReusableCellWithReuseIdentifier("ItemPicCollectionViewCell", forIndexPath: indexPath) as! ItemPicCollectionViewCell
         
-        cell.newItemPic.image = product.imageArray[indexPath.row]
+        let row = indexPath.row
         
+        if let imageFile = itemPictureArray[row].picture{
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                
+                var error:NSError? = nil
+                do{
+                    
+                    let image = UIImage(data: try imageFile.getData())
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if true {
+                            cell.newItemPic.image = image
+                        }
+                    }
+                    
+                }catch let error1 as NSError {
+                    error = error1
+                }
+                if (error != nil) {
+                    print("\(error?.localizedDescription)")
+                }
+                
+            }
+        }
         return cell
     }
     
     
     // MARK: - Navigation
     
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
-        if segue.identifier == EditItemStoryBoard.editItemDoneSegueIdentifier{
+    @IBAction func backToParentViewController(sender: UIBarButtonItem) {
+       
             
-            let title = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ItemAttTableViewCell)?.details.text
-            let description = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
-            var price = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ItemAttTableViewCell)?.details.text
-            price = price?.substringFromIndex((price?.startIndex)!.advancedBy(1))
-            self.product.title = title
-            self.product.description = description
-            self.product.title = title
-            if let dest = segue.destinationViewController as? ProductDetailsViewController{
-                
-                let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
-                navigationItem.backBarButtonItem = backItem
-                dest.product = product
-                //spvc.productCollectionView.reloadData()
-            }
-        }
-        
+        let name = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ItemAttTableViewCell)?.details.text
+        let description = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
+        var price = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ItemAttTableViewCell)?.details.text
+        price = price?.substringFromIndex((price?.startIndex)!.advancedBy(1))
+        self.item.name = name
+        self.item.description = description
+        self.item.price = Double(price!)
+        MerchantDataService.updateItemInStore(item)
+        self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+        
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        // Get the new view controller using segue.destinationViewController.
+//        // Pass the selected object to the new view controller.
+//        
+//        if segue.identifier == EditItemStoryBoard.editItemDoneSegueIdentifier{
+//            
+//            let name = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ItemAttTableViewCell)?.details.text
+//            let description = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
+//            var price = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ItemAttTableViewCell)?.details.text
+//            price = price?.substringFromIndex((price?.startIndex)!.advancedBy(1))
+//            self.item.name = name
+//            self.item.description = description
+//            self.item.price = Double(price!)
+//            if let dest = segue.destinationViewController as? ItemDetailsViewController{
+//                
+//                let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: dest, action: "backToParentViewController")
+//                navigationItem.backBarButtonItem = backItem
+//                dest.item = item
+//                dest.itemPictureArray = itemPictureArray
+//                //spvc.productCollectionView.reloadData()
+//            }
+//        }
+//        
+//    }
 
 
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class NewItemViewController:
 UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate{
@@ -17,28 +18,28 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
         
         static let itemAttCellIdentifier = "ItemAttCell"
         
-        static let itemAttArray = ["Title","Description","Price", "Category"]
+        static let itemAttArray = ["Name","Description","Price", "Category"]
         static let itemAttDetailsArray = ["add title here", "a longer description","$11.99",""]
         static let addNewItemSegueIdentifier = "addNewItem"
     }
     
-    @IBOutlet weak var productImageCollectionView: UICollectionView!
+    @IBOutlet weak var itemPictureCollectionView: UICollectionView!
     
     @IBOutlet weak var addItemPicButton: UIButton!
     
     @IBOutlet weak var newItemTableView: UITableView!
     
-    var picArray = [UIImage]()
+    var itemPictureArray = [ItemPicture]()
     
     let picker = UIImagePickerController()
     
-    var categoriesTest = ["Category 1", "Category 2", "Category 3"]
+    var newItem: PFObject!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         picker.delegate = self
-        
+        newItem = PFObject(className: "item")
     }
 
     override func didReceiveMemoryWarning() {
@@ -81,9 +82,10 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
     
         let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         //print(chosenImage)
-        picArray.append(chosenImage)
-        
-        productImageCollectionView.reloadData()
+        //picArray.append(chosenImage)
+        //MerchantDataService.addItemPicture(newItem, itemImage: chosenImage)
+        //itemPictureArray = MerchantDataService.findAllItemPictureInItem(newItem)
+        itemPictureCollectionView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)
         
     }
@@ -94,13 +96,13 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
     
     // MARK: Collection View
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return picArray.count
+        return itemPictureArray.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = productImageCollectionView.dequeueReusableCellWithReuseIdentifier("ItemPicCollectionViewCell", forIndexPath: indexPath) as! ItemPicCollectionViewCell
+        let cell = itemPictureCollectionView.dequeueReusableCellWithReuseIdentifier("ItemPicCollectionViewCell", forIndexPath: indexPath) as! ItemPicCollectionViewCell
         
-        cell.newItemPic.image = picArray[indexPath.row]
+        //cell.newItemPic.image = picArray[indexPath.row]
         
         return cell
     }
@@ -113,14 +115,19 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == NewItemStoryBoard.addNewItemSegueIdentifier{
-            let title = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ItemAttTableViewCell)?.details.text
+            let name = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ItemAttTableViewCell)?.details.text
             let description = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
             var price = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ItemAttTableViewCell)?.details.text
             price = price?.substringFromIndex((price?.startIndex)!.advancedBy(1))
-            let product = Item(title: title!, description: description!, price: price, categoryArray: categoriesTest, imageArray: picArray)
+            
+            //let product = Item(title: title!, description: description!, price: price, categoryArray: categoriesTest, imageArray: picArray)
+            self.newItem["name"] = name
+            self.newItem["description"] = description
+            self.newItem["price"] = price
+            
             if let spvc = segue.destinationViewController as? StorePageViewController{
             
-                spvc.newItem = product
+                //spvc.newItem = product
                 spvc.addNewItemBool = true
                 //spvc.productCollectionView.reloadData()
             }
