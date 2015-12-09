@@ -151,6 +151,7 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
             
                 let backItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: dest, action: "backToParentViewController")
                 dest.navigationItem.leftBarButtonItem = backItem
+                dest.itemCategoryArray = self.itemCategoriesArray
 
             }
         }else if segue.identifier == StorePageStoryBoard.showItemDetailsSegueIdentifier {

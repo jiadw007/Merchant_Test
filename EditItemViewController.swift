@@ -135,7 +135,7 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        MerchantDataService.addItemPicture(item, itemImage: chosenImage)
+        MerchantDataService.addItemPictureWithItem(item, itemImage: chosenImage)
         itemPictureArray =  MerchantDataService.findAllItemPictureInItem(item).map{ItemPicture(pfObj: $0)}
         itemImageCollectionView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)

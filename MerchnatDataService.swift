@@ -11,12 +11,13 @@ import Fabric
 import Parse
 import Stripe
 import Crashlytics
+import UIKit
 
 class MerchantDataService {
     
     
     static var currentMerchant: PFUser? = nil
-    
+    static var currentStore: PFObject? = nil
     private struct Constants {
     
         static let ParseApplicationID = "by3yCcO7hzhPU5bys8MY1v9FRGtj0iReN3R7ZW2R"
@@ -60,6 +61,7 @@ class MerchantDataService {
         var error: NSError? = nil
         do{
             try PFUser.logInWithUsername(username, password: password)
+            MerchantDataService.currentStore = MerchantDataService.findMerchantStore()
         }catch let error1 as NSError{
             error = error1
         }
@@ -95,7 +97,6 @@ class MerchantDataService {
         // TODO: Find all stores for one merchant?
         let storeArray = MerchantDataService.queryAllObjects(query)
         if storeArray.count != 0 {
-        
             return storeArray[0]
         }else{
             return nil
@@ -105,22 +106,23 @@ class MerchantDataService {
     // - MARK: Item
     
     class func findAllItemsInStore() -> [PFObject]{
-        if let currentStore = MerchantDataService.findMerchantStore(){
         
-            let query = PFQuery(className: "Item")
-            query.whereKey("store", equalTo: currentStore)
+        if MerchantDataService.currentStore != nil{
+        let query = PFQuery(className: "Item")
+            query.whereKey("store", equalTo: MerchantDataService.currentStore!)
             query.includeKey("category.store.category")
             query.includeKey("store.category")
             // Find all items
             return MerchantDataService.queryAllObjects(query)
         }else{
+        
             return []
         }
     
     }
     class func findAllItemCategoriesInStore() -> [PFObject] {
         
-        if let currentStore = MerchantDataService.findMerchantStore(){
+        if let currentStore = MerchantDataService.currentStore{
             let query = PFQuery(className: "ItemCategory")
             query.whereKey("store", equalTo: currentStore)
             query.includeKey("store.category")
@@ -141,7 +143,7 @@ class MerchantDataService {
         return MerchantDataService.queryAllObjects(query)
     
     }
-    class func addItemPicture(item: Item, itemImage: UIImage){
+    class func addItemPictureWithItem(item: Item, itemImage: UIImage){
         
         let itemObject = PFObject(withoutDataWithClassName: "Item", objectId: item.objectId)
         
@@ -168,7 +170,7 @@ class MerchantDataService {
         var itemObject = PFObject(withoutDataWithClassName: "Item", objectId: item.objectId)
         itemObject["name"] = item.name
         itemObject["description"] = item.description
-        itemObject["price"] = item.price
+        itemObject["price"] = Double(item.price)
         itemObject["category"] = PFObject(withoutDataWithClassName: "ItemCategory", objectId: item.category.objectId)
         var error: NSError? = nil
         do{
@@ -205,6 +207,59 @@ class MerchantDataService {
         }
         
         return nil
+    }
+    class func addItemInStore(name: String?, description: String?, category: ItemCategory, price:String?, itemPictureArray:[UIImage] ){
+        
+        var itemObject = PFObject(className: "Item")
+        itemObject["name"] = name!
+        itemObject["description"] = description!
+        itemObject["price"] = Double(price!)
+        itemObject["category"] = PFObject(withoutDataWithClassName: "ItemCategory", objectId: category.objectId)
+        itemObject["isActive"] = true
+        itemObject["store"] = MerchantDataService.currentStore!
+        print(itemObject.objectId)
+        var error: NSError? = nil
+        do{
+            let success = try itemObject.save()
+            //for image in itemPictureArray{
+                
+            MerchantDataService.addItemPictureWithItemId(itemObject.objectId!, itemPictureArray: itemPictureArray)
+            
+            //}
+        }catch let error1 as NSError{
+            error = error1
+        }
+        if error != nil{
+            
+            print("\(error?.localizedDescription)")
+        }
+        
+        
+    }
+    class func addItemPictureWithItemId(id: String!, itemPictureArray:[UIImage]){
+        
+        let itemObject = PFObject(withoutDataWithClassName: "Item", objectId: id)
+        
+        for image in itemPictureArray{
+            
+            var itemPicture = PFObject(className: "ItemPicture")
+            
+            itemPicture["item"] = itemObject
+            itemPicture["picture"] = PFFile(data: UIImageJPEGRepresentation(image, 0.5)!)
+            
+            var error: NSError? = nil
+            do{
+                let success = try itemPicture.save()
+                //return array
+            }catch let error1 as NSError{
+                error = error1
+            }
+            if error != nil{
+                
+                print("\(error?.localizedDescription)")
+            }
+        }
+    
     }
     class func queryAllObjects(query: PFQuery) -> [PFObject]{
     
@@ -243,7 +298,7 @@ class MerchantDataService {
     }
     class func addItemCategoryInStore(categoryName: String!){
     
-        if let currentStore = MerchantDataService.findMerchantStore(){
+        if let currentStore = MerchantDataService.currentStore{
         
             var itemCategory = PFObject(className: "ItemCategory")
             itemCategory["name"] = categoryName
@@ -265,5 +320,7 @@ class MerchantDataService {
         }
     
     }
+    
+    
     
 }
