@@ -241,5 +241,29 @@ class MerchantDataService {
     
     
     }
+    class func addItemCategoryInStore(categoryName: String!){
+    
+        if let currentStore = MerchantDataService.findMerchantStore(){
+        
+            var itemCategory = PFObject(className: "ItemCategory")
+            itemCategory["name"] = categoryName
+            itemCategory["store"] = currentStore
+            
+            var error: NSError? = nil
+            do{
+                let success = try itemCategory.save()
+                //return array
+            }catch let error1 as NSError{
+                error = error1
+            }
+            if error != nil{
+                
+                print("\(error?.localizedDescription)")
+            }
+            
+        
+        }
+    
+    }
     
 }

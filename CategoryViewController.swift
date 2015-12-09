@@ -63,15 +63,19 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         return 1
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemCategoryArray.count
+        return itemCategoryArray.count + 1
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(CategoryStoryboard.categoryCellIdentifier, forIndexPath: indexPath) as! CategoryTableViewCell
         //cell.imageView?.image = UIImage(named: "Warning")
+        if indexPath.row <= itemCategoryArray.count - 1{
+            cell.title.text = itemCategoryArray[indexPath.row].name
+            cell.listButton.setImage(UIImage(named: "reveal-icon"), forState: .Normal)
+        }else{
         
-        cell.title.text = itemCategoryArray[indexPath.row].name
-        cell.listButton.setImage(UIImage(named: "reveal-icon"), forState: .Normal)
-        
+            cell.title.text = "Add Item Category"
+            cell.listButton.setImage(nil, forState: .Normal)
+        }
         return cell
     }
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
@@ -89,6 +93,31 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
             MerchantDataService.deleteItemCategoryInStore(itemCategory)
             self.categoryTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
             
+        }
+    }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if indexPath.row == itemCategoryArray.count{
+            let alertController = UIAlertController(title: "New Item Category", message: "Please input new item category name", preferredStyle: .Alert)
+            let confirmAction = UIAlertAction(title: "Add", style: .Default){
+            
+                (_) in
+                if let field = alertController.textFields![0] as? UITextField{
+                    
+                    MerchantDataService.addItemCategoryInStore(field.text!)
+                    self.itemCategoryArray = MerchantDataService.findAllItemCategoriesInStore().map{ItemCategory.init(pfObj: $0)}
+                    self.categoryTableView.reloadData()
+                }else{
+                    //user did not fill field
+                
+                }
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+            alertController.addTextFieldWithConfigurationHandler{(textField) in
+                textField.placeholder = "Item Category Name"
+            }
+            alertController.addAction(confirmAction)
+            alertController.addAction(cancelAction)
+            self.presentViewController(alertController, animated: true, completion: nil)
         }
     }
     /*
