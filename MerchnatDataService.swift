@@ -169,7 +169,7 @@ class MerchantDataService {
         itemObject["name"] = item.name
         itemObject["description"] = item.description
         itemObject["price"] = item.price
-        
+        itemObject["category"] = PFObject(withoutDataWithClassName: "ItemCategory", objectId: item.category.objectId)
         var error: NSError? = nil
         do{
             let success = try itemObject.save()

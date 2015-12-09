@@ -165,6 +165,7 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                     dest.storeLogo = self.storeLogoImageView.image
                     //print(index?.row)
                     dest.rowNum = (index?.row)!
+                    dest.itemCategoryArray = self.itemCategoriesArray
                     //dest.navigationItem.title = dest.item.name
                 }
                 

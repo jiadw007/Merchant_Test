@@ -36,6 +36,8 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     var itemPictureArray: [ItemPicture]!
     
+    var itemCategoryArray:[ItemCategory]!
+    
     var rowNum: Int!
     
     var reviewArray = [Review]()
@@ -155,6 +157,7 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
                 dest.navigationItem.leftBarButtonItem = backItem
                 dest.item = item
                 dest.itemPictureArray = itemPictureArray
+                dest.itemCategoryArray = itemCategoryArray
             }
         
         }

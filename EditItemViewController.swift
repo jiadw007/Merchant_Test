@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditItemViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+class EditItemViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     
     private struct EditItemStoryBoard{
@@ -25,17 +25,45 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var itemTableView: UITableView!
     
+    @IBOutlet weak var categoryPickerView: UIPickerView!
+    
+    @IBOutlet weak var categoryPickerViewToolbar: UIToolbar!
+    
     var item: Item!
     
     var itemPictureArray: [ItemPicture]!
     
+    var itemCategoryArray: [ItemCategory]!
+    
     let picker = UIImagePickerController()
+    
+    
+    override func viewWillAppear(animated: Bool) {
+        
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         picker.delegate = self
+        var error: NSError? = nil
+        do{
+            
+            let index = try itemCategoryArray.indexOf{$0.name ==  item.category.name}
+            //print(index)
+            
+            categoryPickerView.selectRow(index!, inComponent: 0, animated: true)
+            
+        }catch let error1 as NSError{
+            error = error1
+        }
+        if error != nil{
+            
+            print("\(error?.localizedDescription)")
+        }
+        //print(itemCategoryArray)
     }
     
     override func didReceiveMemoryWarning() {
@@ -67,13 +95,33 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
             cell.details.text = item.description
         case 2:
             cell.details.text = "$\(item.price)"
+        case 3:
+            cell.details.text = item.category.name
+            
         default:
-            cell.details.text = ""
+            break
         }
         //cell.details?.text = NewItemStoryBoard.itemAttDetailsArray[indexPath.row]
         cell.detailsTextField.tag = indexPath.row
+        cell.detailsTextField.placeholder = EditItemStoryBoard.itemAttArray[indexPath.row]
+        
+        
         return cell
         
+    }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! ItemAttTableViewCell
+        if indexPath.row == 3 {
+            self.view.endEditing(true)
+            showPicker()
+        }else{
+            
+            cell.detailsTextField.hidden = false
+            cell.details.hidden = true
+            cell.detailsTextField.text = cell.details.text
+            hidePicker()
+        }
     }
     
     // MARK: - Image Picker
@@ -131,7 +179,52 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         }
         return cell
     }
+    // - MARK: PickerView delegate and data sources
+    // MARK: Data sources
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return  itemCategoryArray.count
+    }
+
+    // MARK: Delegate
+    func pickerView(pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        let titleData = itemCategoryArray[row].name
+        let title = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 15.0)!,NSForegroundColorAttributeName:UIColor.blueColor()])
+        return title
+
+    }
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return itemCategoryArray[row].name
+    }
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let cell = self.itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! ItemAttTableViewCell
+        cell.details.text = itemCategoryArray[row].name
+        item.category = itemCategoryArray[row]
+    }
     
+    func showPicker(){
+        self.categoryPickerView.hidden = false
+        self.categoryPickerViewToolbar.hidden = false
+    
+    }
+    
+    func hidePicker(){
+    
+        self.categoryPickerView.hidden = true
+        self.categoryPickerViewToolbar.hidden = true
+    }
+    
+    
+    @IBAction func cancelPicker(sender: UIBarButtonItem) {
+        hidePicker()
+    }
+    
+    @IBAction func donePicker(sender: UIBarButtonItem) {
+        hidePicker()
+    }
     
     // MARK: - Navigation
     
@@ -145,6 +238,7 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         self.item.name = name
         self.item.description = description
         self.item.price = Double(price!)
+        
         MerchantDataService.updateItemInStore(item)
         self.navigationController?.popViewControllerAnimated(true)
     }
