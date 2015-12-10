@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import EDStarRating
 
-class ReviewTableViewCell: UITableViewCell {
+class ItemReviewTableViewCell: UITableViewCell {
     
     
     
@@ -20,9 +21,13 @@ class ReviewTableViewCell: UITableViewCell {
     
     @IBOutlet weak var reviewPoints: UILabel!
     
+    @IBOutlet weak var starRating: EDStarRating!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

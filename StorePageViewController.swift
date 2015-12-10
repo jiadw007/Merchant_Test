@@ -111,6 +111,8 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                     dispatch_async(dispatch_get_main_queue()) {
                         if true {
                             cell.itemImageView.image = image
+                            cell.itemImageView.layer.cornerRadius = 10
+                            cell.itemImageView.clipsToBounds = true
                         }
                     }
                     
@@ -123,6 +125,7 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                 
             }
         }
+        
         cell.itemTitle.text = item.name
         cell.itemPrice.text = "$\(item.price)"
         return cell
