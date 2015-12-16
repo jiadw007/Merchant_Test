@@ -208,15 +208,15 @@
 		DB395E751BEB0776004343DC /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				DB7948FC1C10025400969F40 /* MerchantBaseModel.swift */,
 				DB1D743A1BE85D86008F23ED /* Alert.swift */,
 				DB65D4CD1BE7FDA700957E53 /* Order.swift */,
 				DB395E711BEB04BE004343DC /* ItemReview.swift */,
 				DB9A583D1BE95EFF006C9804 /* Item.swift */,
-				DB395E731BEB0768004343DC /* Store.swift */,
 				DB7948F61C0F972B00969F40 /* ItemPicture.swift */,
 				DB7948F81C0F9CCB00969F40 /* StoreCategory.swift */,
 				DB7948F41C0F931200969F40 /* ItemCategory.swift */,
-				DB7948FC1C10025400969F40 /* MerchantBaseModel.swift */,
+				DB395E731BEB0768004343DC /* Store.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";

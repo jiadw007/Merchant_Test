@@ -9,27 +9,26 @@
 import Foundation
 import Parse
 
-class ItemCategory : MerchantBaseModel{
+class ItemCategory : PFObject, PFSubclassing{
 
-    var name: String!
-    var store: Store!
     
-    override init(pfObj: PFObject) {
-        super.init(pfObj: pfObj)
-        //print(pfObj)
-        self.name = pfObj["name"] as! String
-        self.store = Store.init(pfObj: pfObj["store"] as! PFObject)
+    override class func initialize(){
+    
+        struct Static {
+        
+            static var onceToken : dispatch_once_t = 0;
+        }
+        dispatch_once(&Static.onceToken){
+        
+            self.registerSubclass()
+        }
+        
+    }
+    static func parseClassName() -> String {
+        return "ItemCategory"
     }
     
-//    init(objectId: String!, name: String!, createdAt: NSDate!, updatedAt: NSDate!, acl: PFACL!){
-//    
-//        self.itemCategoryId = objectId
-//        self.name = name
-//        self.createdAt = createdAt
-//        self.updatedAt = updatedAt
-//        self.ACL = acl
-//    
-//    }
-
-
+    @NSManaged var name: String!
+    @NSManaged var store: Store!
+    
 }

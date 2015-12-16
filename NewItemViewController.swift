@@ -18,7 +18,7 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
         
         static let itemAttCellIdentifier = "ItemAttCell"
         
-        static let itemAttArray = ["Name","Description","Price", "Category"]
+        static let itemAttArray = ["Name","Summary","Price", "Category"]
         static let itemAttDetailsArray = ["add title here", "a longer description","$11.99","dinner"]
         
     }
@@ -39,7 +39,8 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
     
     let picker = UIImagePickerController()
     
-    var newItem: Item!
+    //var newItem: Item!
+    let defaults = NSUserDefaults.standardUserDefaults()
     
     var newItemCategory: ItemCategory!
     
@@ -189,15 +190,47 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
         
         
         let name = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ItemAttTableViewCell)?.details.text
-        let description = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
+        let summary = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         var price = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         price = price?.substringFromIndex((price?.startIndex)!.advancedBy(1))
 //        self.newItem.name = name
 //        self.newItem.description = description
 //        self.newItem.price = Double(price!)
         
-        MerchantDataService.addItemInStore(name, description: description, category: self.newItemCategory, price: price, itemPictureArray: itemPictureArray)
-        self.navigationController?.popViewControllerAnimated(true)
+        //MerchantDataService.addItemInStore(name, description: description, category: self.newItemCategory, price: price, itemPictureArray: itemPictureArray)
+        //self.navigationController?.popViewControllerAnimated(true)
+        let item = Item()
+        item.category = newItemCategory
+        item.isActive = true
+        item.name = name!
+        item.price = Double(price!)!
+        item.summary = summary
+        if let store = self.defaults.objectForKey("currentStore") as? Store{
+        
+            item.store = store
+
+        }
+        item.saveInBackgroundWithBlock{(success: Bool, error: NSError?) -> Void in
+        
+        
+        
+            if (success){
+            
+                self.navigationController?.popViewControllerAnimated(true)
+            
+            }else{
+            
+                //TODO: Show error
+                print("Item saving")
+                print("\(error.debugDescription)")
+            
+            }
+        
+        
+        
+        }
+    
+        
     }
     // In a storyboard-based application, you will often want to do a little preparation before navigation
 //    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

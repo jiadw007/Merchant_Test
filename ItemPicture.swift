@@ -9,17 +9,34 @@
 import Foundation
 import Parse
 
-class ItemPicture : MerchantBaseModel{
+class ItemPicture : PFObject, PFSubclassing{
     
-
-    var picture: PFFile!
-    var item: Item!
-    override init(pfObj: PFObject){
+    
+    override class func initialize(){
         
-        super.init(pfObj: pfObj)
-        self.picture = pfObj["picture"] as! PFFile
-        self.item = Item.init(pfObj: pfObj["item"] as! PFObject)
+        struct Static {
+            
+            static var onceToken : dispatch_once_t = 0;
+        }
+        dispatch_once(&Static.onceToken){
+            
+            self.registerSubclass()
+        }
+        
     }
+    static func parseClassName() -> String {
+        return "ItemPicture"
+    }
+    
+    @NSManaged var picture: PFFile!
+    @NSManaged var item: Item!
+    
+//    override init(pfObj: PFObject){
+//        
+//        super.init(pfObj: pfObj)
+//        self.picture = pfObj["picture"] as! PFFile
+//        self.item = Item.init(pfObj: pfObj["item"] as! PFObject)
+//    }
 //    init(itemPictureId: String!, picture: PFFile!, createdAt: NSDate!, updatedAt: NSDate!, acl : PFACL!){
 //    
 //        self.itemPictureId = itemPictureId

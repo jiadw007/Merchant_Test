@@ -12,7 +12,6 @@ import EDStarRating
 class ItemReviewTableViewCell: UITableViewCell {
     
     
-    
     @IBOutlet weak var userImage: UIImageView!
 
     @IBOutlet weak var reviewTitle: UILabel!
@@ -26,7 +25,15 @@ class ItemReviewTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.starRating.backgroundColor = UIColor.whiteColor()
+        self.starRating.starImage = UIImage(named: "star-template")
+        self.starRating.starImage = self.starRating.starImage
+        self.starRating.starHighlightedImage = UIImage(named: "star-highlighted-template")
+        self.starRating.maxRating = 5;
+        self.starRating.editable = false
         
+        self.starRating.displayMode = UInt(EDStarRatingDisplayHalf)
+        self.starRating.tintColor = UIColor.blueColor()
         
     }
 

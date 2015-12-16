@@ -8,26 +8,66 @@
 
 import UIKit
 import Parse
-class Item : MerchantBaseModel{
+class Item : PFObject, PFSubclassing{
     
     
-    var name: String! = ""
-    var description: String! = ""
-    var price: Double! = 0.0
-    var isActive : Bool! = true
-    var store : Store!
-    var category : ItemCategory!
-    
-    override init(pfObj: PFObject) {
-        super.init(pfObj: pfObj)
+    override class func initialize(){
         
-        self.name = pfObj["name"] as! String
-        self.description = pfObj["description"] as! String
-        self.price = pfObj["price"] as! Double
-        self.isActive = pfObj["isActive"] as! Bool
-        self.store = Store.init(pfObj: pfObj["store"] as! PFObject)
-        self.category = ItemCategory.init(pfObj: pfObj["category"] as! PFObject)
+        struct Static {
+            
+            static var onceToken : dispatch_once_t = 0;
+        }
+        dispatch_once(&Static.onceToken){
+            
+            self.registerSubclass()
+        }
+        
     }
+    static func parseClassName() -> String {
+        return "Item"
+    }
+    
+    @NSManaged var name : String!
+    @NSManaged var summary : String!
+    @NSManaged var price: Double
+    @NSManaged var isActive : Bool
+    @NSManaged var store : Store!
+    @NSManaged var category : ItemCategory!
+    @NSManaged var discount: Double
+    func updateItem(){
+    
+        let query = PFQuery(className: "Item")
+        query.getObjectInBackgroundWithId(self.objectId!){(itemObject: PFObject?, error: NSError?) -> Void in
+            
+            if error != nil{
+                //TODO: Show error
+                
+            }else if let itemObject = itemObject{
+                
+                itemObject["name"] = self.name
+                itemObject["summary"] = self.summary
+                itemObject["price"] = self.price
+                itemObject["discount"] = self.discount
+                itemObject.saveInBackground()
+                
+            }
+            
+        }
+    
+    }
+    
+    
+    
+//    override init(pfObj: PFObject) {
+//        super.init(pfObj: pfObj)
+//        
+//        self.name = pfObj["name"] as! String
+//        self.description = pfObj["description"] as! String
+//        self.price = pfObj["price"] as! Double
+//        self.isActive = pfObj["isActive"] as! Bool
+//        self.store = Store.init(pfObj: pfObj["store"] as! PFObject)
+//        self.category = ItemCategory.init(pfObj: pfObj["category"] as! PFObject)
+//    }
     
 //    private func getFirstItemPic() -> {
 //    

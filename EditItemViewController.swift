@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class EditItemViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
@@ -15,7 +16,7 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         
         static let itemAttCellIdentifier = "ItemAttCell"
         static let editItemDoneSegueIdentifier = "EditItemDone"
-        static let itemAttArray = ["Name","Description","Price", "Category"]
+        static let itemAttArray = ["Name","Summary","Price", "Category"]
     }
     
     
@@ -92,7 +93,7 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         case 0:
             cell.details.text = item.name
         case 1:
-            cell.details.text = item.description
+            cell.details.text = item.summary
         case 2:
             cell.details.text = "$\(item.price)"
         case 3:
@@ -135,9 +136,25 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
         let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        MerchantDataService.addItemPictureWithItem(item, itemImage: chosenImage)
-        itemPictureArray =  MerchantDataService.findAllItemPictureInItem(item).map{ItemPicture(pfObj: $0)}
-        itemImageCollectionView.reloadData()
+        
+        //DONE : Add new item picture
+        let itemPicture = ItemPicture()
+        itemPicture.item = self.item
+        itemPicture.picture = PFFile(data: UIImageJPEGRepresentation(chosenImage, 0.5)!)
+        itemPicture.saveInBackgroundWithBlock{(success: Bool, error: NSError?) -> Void in
+        
+            if (success){
+                
+                self.itemPictureArray.append(itemPicture)
+                self.itemImageCollectionView.reloadData()
+
+            }else{
+            //TODO: Show Error
+                print("Item picture saving")
+                print("\(error.debugDescription)")
+            
+            }
+        }
         dismissViewControllerAnimated(true, completion: nil)
         
     }
@@ -230,17 +247,33 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBAction func backToParentViewController(sender: UIBarButtonItem) {
        
-            
+        
         let name = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ItemAttTableViewCell)?.details.text
-        let description = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
+        let summary = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         var price = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         price = price?.substringFromIndex((price?.startIndex)!.advancedBy(1))
-        self.item.name = name
-        self.item.description = description
-        self.item.price = Double(price!)
+        //self.item.name = name!
+        //self.item.summary = summary!
+        //self.item.price = Double(price!)!
         
-        MerchantDataService.updateItemInStore(item)
-        self.navigationController?.popViewControllerAnimated(true)
+        //self.item.updateItem()
+        let query = Item.query()!
+        query.getObjectInBackgroundWithId(self.item.objectId!){(itemObject: PFObject?, error: NSError?) -> Void in
+            
+            if error != nil{
+                //TODO: Show error
+                
+            }else if let itemObject = itemObject{
+                
+                itemObject["name"] = name!
+                itemObject["summary"] = summary!
+                itemObject["price"] = Double(price!)!
+                itemObject.saveInBackground()
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+            
+        }
+        
     }
     
     

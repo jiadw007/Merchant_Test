@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class CategoryViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -17,6 +18,8 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     var itemCategoryArray = [ItemCategory]()
+    
+    var currentStore: Store!
 
     @IBOutlet weak var categoryTableView: UITableView!
     
@@ -88,10 +91,22 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
         if editingStyle == UITableViewCellEditingStyle.Delete{
             
             let itemCategory = self.itemCategoryArray[indexPath.row]
-            self.itemCategoryArray.removeAtIndex(indexPath.row)
             
-            MerchantDataService.deleteItemCategoryInStore(itemCategory)
-            self.categoryTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+            itemCategory.deleteInBackgroundWithBlock{ (success: Bool, error: NSError?) -> Void in
+            
+                if (success){
+                    self.categoryTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                    self.itemCategoryArray.removeAtIndex(indexPath.row)
+                
+                }else{
+                    //TODO: Show error
+                    print("Item category deleting")
+                    print("\(error.debugDescription)")
+                
+                }
+                
+            
+            }
             
         }
     }
@@ -103,11 +118,27 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
                 (_) in
                 if let field = alertController.textFields![0] as? UITextField{
                     
-                    MerchantDataService.addItemCategoryInStore(field.text!)
-                    self.itemCategoryArray = MerchantDataService.findAllItemCategoriesInStore().map{ItemCategory.init(pfObj: $0)}
-                    self.categoryTableView.reloadData()
+                    let itemCategory = ItemCategory()
+                    itemCategory.name = field.text!
+                    itemCategory.store = self.currentStore
+                    itemCategory.saveInBackgroundWithBlock{(success: Bool, error: NSError? ) -> Void in
+                    
+                        if (success) {
+                        
+                            self.itemCategoryArray.append(itemCategory)
+                            self.categoryTableView.reloadData()
+
+                        }else{
+                        
+                            //TODO: Show error
+                            print("Item cateogry saving")
+                            print("\(error.debugDescription)")
+                        }
+                    
+                    
+                    }
                 }else{
-                    //user did not fill field
+                    //TODO:　User did not fill field
                 
                 }
             }

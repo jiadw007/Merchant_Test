@@ -54,31 +54,7 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     override func viewWillAppear(animated: Bool) {
         
-        //TODO: Reload item
-        item = MerchantDataService.reloadItem(item)
-        self.navigationItem.title = item.name
         
-        //TODO: Load all item pictures
-        itemPictureArray = MerchantDataService.findAllItemPictureInItem(item).map{ItemPicture(pfObj: $0)}
-        
-        //TODO: Load all item review
-        //print(MerchantDataService.findAllItemReviewInItem(item))
-        itemReviewArray = MerchantDataService.findAllItemReviewInItem(item).map{ItemReview(pfObj: $0)}
-        
-        if itemPictureArray.count != 0{
-            
-            loadItemPicture(itemPictureArray[0])
-        }
-        
-        // Average review points
-        var reviewPointsSum = 0.0
-        
-        for review in itemReviewArray{
-            
-            reviewPointsSum += Double(review.rating)
-            
-        }
-        averagePoints.text = String(format: "%.1f", reviewPointsSum / Double(itemReviewArray.count))
         //Rating Star
         self.starRating.backgroundColor = UIColor.whiteColor()
         self.starRating.starImage = UIImage(named: "star-template")
@@ -89,18 +65,14 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         self.starRating.editable = false
         //self.starRating.horizontalMargin = 25.0
         //self.starRating.delegate = self
-        self.starRating.rating = Float(averagePoints.text!)!
+        
         self.starRating.displayMode = UInt(EDStarRatingDisplayHalf)
         self.starRating.tintColor = UIColor.blueColor()
-        self.starRating.setNeedsDisplay()
+        
+        loadItem()
+        
+        
 
-        price.text = "$\(item.price)"
-        longerDescription.text = item.description
-        let attributedString = NSMutableAttributedString(string: "$ 21")
-        attributedString.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, attributedString.length))
-        originalPrice.attributedText = attributedString
-        
-        
     }
     
     override func viewDidLoad() {
@@ -112,10 +84,128 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         
         //self.reviewTableView.reloadData()
         
-        
     }
     
-    // MARK: - Load item picutre
+    // MARK: - PFQuery Function
+    func loadItem(){
+    
+        //TODO: Reload item
+        let query = Item.query()
+        
+        query?.getObjectInBackgroundWithId(self.item.objectId!){ (object: PFObject?, error: NSError?) -> Void in
+        
+            
+            if error == nil{
+            
+                if let item = object as? Item{
+                
+                    self.item = item
+                    self.loadAllItemPicture()
+                    self.loadAllItemReview()
+                
+                    self.price.text = "$\(item.price)"
+                    self.longerDescription.text = item.summary
+                    let discount = item.discount
+                        
+                    if discount != 0.0{
+                    
+                        let attributedString = NSMutableAttributedString(string: "$\(item.price)")
+                        attributedString.addAttributes([NSStrikethroughStyleAttributeName : 1], range: NSMakeRange(0, attributedString.length))
+                        self.originalPrice.attributedText = attributedString
+                        self.originalPrice.hidden = false
+                        self.price.text = String(format: "%.1f", item.price * discount)
+                    }else{
+                    
+                        self.originalPrice.hidden = true
+                    
+                    }
+                    self.navigationItem.title = item.name
+
+                }
+            
+            
+            }
+        
+        }
+    
+    }
+    
+    func loadAllItemPicture(){
+    
+        let query = ItemPicture.query()!
+        query.whereKey("item", equalTo: self.item)
+        query.includeKey("item.category.store.category")
+        query.includeKey("item.store.category")
+        query.orderByDescending("updatedAt")
+        query.findObjectsInBackgroundWithBlock{(objects: [PFObject]?, error: NSError? ) -> Void in
+        
+            if error == nil{
+            
+                if let objects = objects as? [ItemPicture]{
+                
+                    self.itemPictureArray = objects
+                    if self.itemPictureArray.count != 0{
+                    
+                        self.loadItemPicture(self.itemPictureArray[0])
+                    
+                    }
+                }
+            
+            
+            }else{
+            
+                print("Error: \(error!) \(error!.debugDescription)")
+            
+            }
+        
+        
+        }
+    
+    }
+
+    func loadAllItemReview(){
+        
+        let query = ItemReview.query()!
+        query.whereKey("item", equalTo: self.item)
+        query.includeKey("item.category.store.category")
+        query.includeKey("item.store.category")
+        query.orderByDescending("updatedAt")
+        query.findObjectsInBackgroundWithBlock{(objects: [PFObject]?, error: NSError? ) -> Void in
+        
+            if error == nil{
+            
+            
+                if let objects = objects as? [ItemReview]{
+                
+                    self.itemReviewArray = objects
+                    
+                    var reviewPointsSum = 0.0
+                    
+                    for review in self.itemReviewArray{
+                        
+                        reviewPointsSum += Double(review.rating)
+                        
+                    }
+                    self.averagePoints.text = String(format: "%.1f", reviewPointsSum / Double(self.itemReviewArray.count))
+                    self.starRating.rating = Float(self.averagePoints.text!)!
+                    self.starRating.setNeedsDisplay()
+                    self.reviewTableView.reloadData()
+                }
+            
+            
+            
+            }else{
+            
+                print("Error: \(error!) \(error!.debugDescription)")
+            
+            
+            }
+        
+        }
+    
+    
+    }
+    
     func loadItemPicture(itemPicture : ItemPicture){
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
@@ -155,39 +245,43 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     }
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(ItemDetailsStoryBoard.cellReuseIdentifier, forIndexPath: indexPath) as! ItemReviewTableViewCell
-        if let pic = MerchantDataService.findUserProfilePic(itemReviewArray[indexPath.row]){
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
         
-            var error:NSError? = nil
-            do{
-                
-                let image = UIImage(data: try pic.getData())
-                cell.userImage.image = image
-                
-            }catch let error1 as NSError {
-                error = error1
-            }
-            if (error != nil) {
-                print("\(error?.localizedDescription)")
-            }
+        let review = itemReviewArray[indexPath.row]
+        
+        let query = PFUser.query()!
+        query.whereKey("objectId", equalTo: review.user.objectId!)
+        query.orderByDescending("updatedAt")
+        query.getFirstObjectInBackgroundWithBlock{ (object: PFObject?, error: NSError?) -> Void in
+        
+            if error == nil{
             
-        //}
+                if let object = object as? PFUser{
+                
+                    let imageFile = object.valueForKey("profilePic") as! PFFile
+                    var error:NSError? = nil
+                    do{
+                        let image = UIImage(data: try imageFile.getData())
+                        cell.userImage.image = image
+                    }catch let error1 as NSError {
+                        error = error1
+                    }
+                    if (error != nil) {
+                        print("\(error?.localizedDescription)")
+                    }
+                
+                }
+            
+            }else{
+            
+                print("\(error?.localizedDescription)")
+            
+            }
+        
         }
-        //cell.userImage.image = UIImage(named: "customer icon.jpeg")
-        cell.reviewTitle.text = itemReviewArray[indexPath.row].content
-        cell.reviewDetails.text = itemReviewArray[indexPath.row].content
-        cell.reviewPoints.text = "\(itemReviewArray[indexPath.row].rating)"
-        cell.starRating.backgroundColor = UIColor.whiteColor()
-        cell.starRating.starImage = UIImage(named: "star-template")
-        cell.starRating.starImage = self.starRating.starImage
-        cell.starRating.starHighlightedImage = UIImage(named: "star-highlighted-template")
-        cell.starRating.maxRating = 5;
-        cell.starRating.editable = false
-        //self.starRating.horizontalMargin = 25.0
-        //self.starRating.delegate = self
-        cell.starRating.rating = itemReviewArray[indexPath.row].rating
-        cell.starRating.displayMode = UInt(EDStarRatingDisplayHalf)
-        cell.starRating.tintColor = UIColor.blueColor()
+        cell.reviewTitle.text = review.content
+        cell.reviewDetails.text = review.content
+        cell.reviewPoints.text = "\(review.rating)"
+        cell.starRating.rating = review.rating
         cell.starRating.setNeedsDisplay()
         return cell
     }

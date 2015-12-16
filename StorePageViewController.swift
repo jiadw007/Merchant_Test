@@ -26,6 +26,8 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
 
     var currentStore: Store!
     
+    //let defaults = NSUserDefaults.standardUserDefaults()
+    
     @IBOutlet weak var storeLogoImageView: UIImageView!
     
     @IBOutlet weak var itemSegmentedControl: UISegmentedControl!
@@ -41,13 +43,9 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     
     }
     override func viewWillAppear(animated: Bool) {
-        //TODO: Load all items
-        itemArray = MerchantDataService.findAllItemsInStore().map{Item.init(pfObj: $0)}
-        //TODO: Load all item categories
-        itemCategoriesArray = MerchantDataService.findAllItemCategoriesInStore().map{ItemCategory.init(pfObj: $0)}
-        //TODO: Load current store
+        
+        //DONE: Load current store
         loadCurrentStore()
-        self.itemCollectionView.reloadData()
 
     }
 
@@ -70,49 +68,46 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func loadCurrentStore(){
-    
-        self.currentStore = MerchantDataService.findMerchantStore().map{Store(pfObj: $0)}
-        let imageFile = self.currentStore.logo
-        var error:NSError? = nil
-        do{
+        
+        let merchant = PFUser.currentUser()
+        let query = Store.query()!
+        
+        query.whereKey("owner", equalTo: merchant!)
+        query.includeKey("category")
+        query.getFirstObjectInBackgroundWithBlock{ (object: PFObject?, error : NSError? ) -> Void in
             
-            let image = UIImage(data: try imageFile.getData())
-            dispatch_async(dispatch_get_main_queue()) {
-                if true {
-                    self.storeLogoImageView.image = image
+            if error == nil{
+                
+                if let store = object as? Store{
+                    self.currentStore = store
+                    //self.defaults.setObject(self.currentStore, forKey: "currentStore")
+                    //TODO: Load Store Logo
+                    self.loadStoreLogo()
+                    //TODO: Load All Items
+                    self.loadAllItem()
+                    //TODO: Load All ItemCategories
+                    self.loadAllItemCategory()
                 }
             }
+        
+        }
+        
+    }
+    
+    func loadStoreLogo(){
+    
+        if self.currentStore != nil{
             
-        }catch let error1 as NSError {
-            error = error1
-        }
-        if (error != nil) {
-            print("\(error?.localizedDescription)")
-        }
-    
-    }
-    
-    // MARK: - Collection View
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return itemArray.count
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StorePageStoryBoard.itemCollectionCellReuseIdentifier, forIndexPath: indexPath) as! ItemCollectionViewCell
-        let item = self.itemArray[indexPath.row]
-        if let imageFile = MerchantDataService.fetchImageFile(item){
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
                 
+                let imageFile = self.currentStore.logo
                 var error:NSError? = nil
                 do{
                     
-                    let image = UIImage(data: try imageFile.getData())
+                    let image = UIImage(data: try imageFile!.getData())
                     dispatch_async(dispatch_get_main_queue()) {
                         if true {
-                            cell.itemImageView.image = image
-                            cell.itemImageView.layer.cornerRadius = 10
-                            cell.itemImageView.clipsToBounds = true
+                           self.storeLogoImageView.image = image
                         }
                     }
                     
@@ -122,8 +117,123 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                 if (error != nil) {
                     print("\(error?.localizedDescription)")
                 }
+            }
+            
+            
+        }
+    
+    }
+    
+    func loadAllItem(){
+        
+        if self.currentStore != nil{
+            let query = Item.query()!
+            query.whereKey("store", equalTo: self.currentStore)
+            query.includeKey("category.store.category")
+            query.includeKey("store.category")
+            query.orderByDescending("updatedAt")
+            // Find all items
+            query.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) -> Void in
+                
+                if error == nil{
+                
+                    if let objects = objects as? [Item]{
+                    
+                        //for object in objects{
+                        
+                            self.itemArray = objects
+                        //}
+                    
+                    }
+                    
+                }else{
+                    //TODO: Show Error
+                    print("\(error?.localizedDescription)")
+                
+                }
+                self.itemCollectionView.reloadData()
                 
             }
+        }
+    
+    }
+    
+    func loadAllItemCategory(){
+        
+        if self.currentStore != nil{
+        
+            let query = ItemCategory.query()!
+            query.whereKey("store", equalTo: self.currentStore)
+            query.includeKey("store.category")
+            query.orderByDescending("updatedAt")
+            query.findObjectsInBackgroundWithBlock { (objects: [PFObject]?, error: NSError?) -> Void in
+             
+                if error == nil{
+                
+                    if let objects = objects as?[ItemCategory]{
+                    
+                        for object in objects{
+                            self.itemCategoriesArray.append(object)
+                        }
+                    
+                    }
+                
+                }else{
+                    //TODO: Show Error
+                    print("\(error?.localizedDescription)")
+                    
+                }
+                
+            }
+        
+        
+        }
+
+        
+    
+    }
+
+    // MARK: - Collection View
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return itemArray.count
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StorePageStoryBoard.itemCollectionCellReuseIdentifier, forIndexPath: indexPath) as! ItemCollectionViewCell
+        let item = self.itemArray[indexPath.row]
+        
+        let query = ItemPicture.query()!
+        query.whereKey("item", equalTo: item)
+        query.orderByAscending("updatedAt")
+        query.getFirstObjectInBackgroundWithBlock { (object: PFObject?, error: NSError?) -> Void in
+        
+            if error == nil{
+            
+                if let object = object as? ItemPicture{
+                
+                    let imageFile = object.picture
+                    var error: NSError? = nil
+                    do{
+                        
+                        let image = UIImage(data: try imageFile.getData())
+                        cell.itemImageView.image = image
+                        cell.itemImageView.layer.cornerRadius = 10
+                        cell.itemImageView.clipsToBounds = true
+                        
+                    
+                    }catch let error1 as NSError {
+                        error = error1
+                    }
+                    if (error != nil) {
+                        print("\(error?.localizedDescription)")
+                    }
+                
+                }
+            
+            }
+        
+        
         }
         
         cell.itemTitle.text = item.name
@@ -145,6 +255,7 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                 let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
                 navigationItem.backBarButtonItem = backItem
                 dest.itemCategoryArray = self.itemCategoriesArray
+                dest.currentStore = self.currentStore
             }
             
         
