@@ -18,15 +18,11 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     
     var itemArray = [Item]()
     
-    var addNewItemBool = false
-    
-    var newItem : Item?
-    
     //var currentMerchant : PFUser!
 
     var currentStore: Store!
     
-    //let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = NSUserDefaults.standardUserDefaults()
     
     @IBOutlet weak var storeLogoImageView: UIImageView!
     
@@ -44,21 +40,23 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     override func viewWillAppear(animated: Bool) {
         
-        //DONE: Load current store
-        loadCurrentStore()
-
+        // Check reload
+        let reload = defaults.boolForKey("reloadStore")
+        if (reload){
+        
+            loadAllItem()
+            defaults.setBool(false, forKey: "reloadStore")
+        }else{
+            self.itemCollectionView.reloadData()
+        }
     }
 
     override func viewDidLoad() {
     
         super.viewDidLoad()
-       
-        if addNewItemBool == true && newItem != nil{
         
-            itemArray.append(newItem!)
-            addNewItemBool = false
-            newItem = nil
-        }
+        //DONE: Load current store
+        loadCurrentStore()
         
     }
 
@@ -139,11 +137,9 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                 
                     if let objects = objects as? [Item]{
                     
-                        //for object in objects{
-                        
-                            self.itemArray = objects
-                        //}
-                    
+                        self.itemArray = objects
+                        self.itemCollectionView.reloadData()
+
                     }
                     
                 }else{
@@ -151,7 +147,6 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                     print("\(error?.localizedDescription)")
                 
                 }
-                self.itemCollectionView.reloadData()
                 
             }
         }
@@ -202,42 +197,54 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StorePageStoryBoard.itemCollectionCellReuseIdentifier, forIndexPath: indexPath) as! ItemCollectionViewCell
         let item = self.itemArray[indexPath.row]
-        
+        var itemImageArray = [UIImage]()
         let query = ItemPicture.query()!
         query.whereKey("item", equalTo: item)
         query.orderByAscending("updatedAt")
-        query.getFirstObjectInBackgroundWithBlock { (object: PFObject?, error: NSError?) -> Void in
+        query.findObjectsInBackgroundWithBlock{(objects: [PFObject]?, error: NSError?) -> Void in
         
             if error == nil{
             
-                if let object = object as? ItemPicture{
-                
-                    let imageFile = object.picture
-                    var error: NSError? = nil
-                    do{
-                        
-                        let image = UIImage(data: try imageFile.getData())
-                        cell.itemImageView.image = image
-                        cell.itemImageView.layer.cornerRadius = 10
-                        cell.itemImageView.clipsToBounds = true
-                        
+                if let objects = objects as? [ItemPicture]{
                     
-                    }catch let error1 as NSError {
-                        error = error1
+                    for object in objects{
+                    
+                        let imageFile = object.picture
+                        var error:NSError? = nil
+                        do{
+                            
+                            let image = UIImage(data: try imageFile!.getData())
+                            itemImageArray.append(image!)
+                            
+                        }catch let error1 as NSError {
+                            error = error1
+                        }
+                        if (error != nil) {
+                            print("\(error?.localizedDescription)")
+                        }
+                        
                     }
-                    if (error != nil) {
-                        print("\(error?.localizedDescription)")
-                    }
-                
+                    
+                    cell.itemImageView.animationImages = itemImageArray
+                    cell.itemImageView.animationDuration = NSTimeInterval(6.0 * Double(itemImageArray.count))
+                    print("\(item.name) delay read")
+                    cell.itemImageView.startAnimating()
                 }
             
+            
             }
-        
-        
         }
-        
+       
         cell.itemTitle.text = item.name
-        cell.itemPrice.text = "$\(item.price)"
+        
+        if item.discount != 0 {
+            
+            cell.itemPrice.text = "$\(round(item.price * item.discount * 10) / 10)"
+        }else{
+        
+            cell.itemPrice.text = "$\(item.price)"
+
+        }
         return cell
     }
     
@@ -266,6 +273,7 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                 let backItem = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.Plain, target: dest, action: "backToParentViewController")
                 dest.navigationItem.leftBarButtonItem = backItem
                 dest.itemCategoryArray = self.itemCategoriesArray
+                dest.currentStore = self.currentStore
 
             }
         }else if segue.identifier == StorePageStoryBoard.showItemDetailsSegueIdentifier {

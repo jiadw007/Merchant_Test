@@ -15,4 +15,12 @@ class ItemCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var itemTitle: UILabel!
     
     @IBOutlet weak var itemPrice: UILabel!
+    
+    override func awakeFromNib() {
+        
+        self.itemImageView.layer.cornerRadius = 10
+        self.itemImageView.clipsToBounds = true
+        
+        
+    }
 }

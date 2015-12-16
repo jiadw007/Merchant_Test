@@ -50,11 +50,27 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
     
     var storeLogo : UIImage!
     
+    let defaults = NSUserDefaults.standardUserDefaults()
+    
     @IBOutlet weak var storeLogoImageView: UIImageView!
     
     override func viewWillAppear(animated: Bool) {
         
+        let reloadItem = defaults.boolForKey("reloadItem")
+        if (reloadItem) {
         
+            loadItem()
+            defaults.setBool(false, forKey: "reloadItem")
+        
+        }
+        self.itemImage.startAnimating()
+        
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
         //Rating Star
         self.starRating.backgroundColor = UIColor.whiteColor()
         self.starRating.starImage = UIImage(named: "star-template")
@@ -68,22 +84,8 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         
         self.starRating.displayMode = UInt(EDStarRatingDisplayHalf)
         self.starRating.tintColor = UIColor.blueColor()
-        
-        loadItem()
-        
-        
-
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        
         storeLogoImageView.image = storeLogo
-        
-        //self.reviewTableView.reloadData()
-        
+        loadItem()
     }
     
     // MARK: - PFQuery Function
@@ -136,7 +138,7 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
         query.whereKey("item", equalTo: self.item)
         query.includeKey("item.category.store.category")
         query.includeKey("item.store.category")
-        query.orderByDescending("updatedAt")
+        query.orderByAscending("updatedAt")
         query.findObjectsInBackgroundWithBlock{(objects: [PFObject]?, error: NSError? ) -> Void in
         
             if error == nil{
@@ -144,11 +146,28 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
                 if let objects = objects as? [ItemPicture]{
                 
                     self.itemPictureArray = objects
-                    if self.itemPictureArray.count != 0{
+                    var itemImageArray = [UIImage]()
+                    for object in objects{
+                        
+                        let imageFile = object.picture
+                        var error:NSError? = nil
+                        do{
+                            
+                            let image = UIImage(data: try imageFile!.getData())
+                            itemImageArray.append(image!)
+                            
+                        }catch let error1 as NSError {
+                            error = error1
+                        }
+                        if (error != nil) {
+                            print("\(error?.localizedDescription)")
+                        }
                     
-                        self.loadItemPicture(self.itemPictureArray[0])
                     
                     }
+                    self.itemImage.animationImages = itemImageArray
+                    self.itemImage.animationDuration = 6.0 * Double(itemImageArray.count)
+                    self.itemImage.startAnimating()
                 }
             
             

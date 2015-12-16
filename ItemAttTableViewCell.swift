@@ -26,7 +26,7 @@ class ItemAttTableViewCell: UITableViewCell, UITextFieldDelegate{
     func detailsTapped(){
         
         
-        if detailsTextField.tag != 3{
+        if detailsTextField.tag != 4{
             details.hidden = true
             detailsTextField.hidden = false
             detailsTextField.text = details.text
@@ -37,7 +37,7 @@ class ItemAttTableViewCell: UITableViewCell, UITextFieldDelegate{
     // - MARK: Textfield delegate
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        if textField.tag == 3{
+        if textField.tag == 4{
             return false
             
         }
@@ -45,40 +45,66 @@ class ItemAttTableViewCell: UITableViewCell, UITextFieldDelegate{
     }
     
     func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+        switch textField.tag{
         
-        if textField.tag == 2{
-            
+        
+        case 2:
             var priceText: String!
-        
-            if detailsTextField.text?[(detailsTextField.text?.startIndex)!] != "$"{
             
+            if textField.text?[(textField.text?.startIndex)!] != "$"{
+                
                 priceText = textField.text
-            
+                
             }else{
                 
                 priceText = textField.text?.substringFromIndex((textField.text!.startIndex).advancedBy(1))
-            
+                
             }
             
             if let value = priceText.doubleValue{
-            
-                detailsTextField.hidden = true
-                details.hidden = false
-                details.text = "$\(priceText)"
-                return true
+                if value > 0 {
+                    textField.hidden = true
+                    details.hidden = false
+                    details.text = "$\(priceText)"
+                    return true
+                }else{
+                    
+                    invalidValueAlert(textField, message: "Price > 0")
+                
+                }
                 
             }else{
-            
+                
                 numberFormatAlert(textField)
                 return false
             }
-        }else{
+        case 3:
+            if let value = textField.text?.doubleValue{
+                if value <= 1.0 && value >= 0.0 {
+                
+                    textField.hidden = true
+                    details.hidden = false
+                    details.text = "\(value)"
+                    return true
+                
+                }else{
+                    
+                    invalidValueAlert(textField, message: "Discount range 0 - 1")
+                    return false
+                }
+            
+            }else{
+                numberFormatAlert(textField)
+                return false
+            
+            }
+        default:
+            
             detailsTextField.hidden = true
             details.hidden = false
             details.text = detailsTextField.text
-            
-        }
         
+        }
         return true
     }
     
@@ -90,6 +116,11 @@ class ItemAttTableViewCell: UITableViewCell, UITextFieldDelegate{
     func numberFormatAlert(textField: UITextField){
         
         let alert = Utils.createPopupAlertView("Invalid \(textField.placeholder!)", message: "Please Enter Number.", buttonTitle: "Ok")
+        alert.show()
+    }
+    func invalidValueAlert(textField: UITextField, message: String){
+    
+        let alert = Utils.createPopupAlertView("Invalid \(textField.placeholder!)", message: message, buttonTitle: "Ok")
         alert.show()
     }
     

@@ -95,9 +95,9 @@ class CategoryViewController: UIViewController, UITableViewDataSource, UITableVi
             itemCategory.deleteInBackgroundWithBlock{ (success: Bool, error: NSError?) -> Void in
             
                 if (success){
-                    self.categoryTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+                    //self.categoryTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
                     self.itemCategoryArray.removeAtIndex(indexPath.row)
-                
+                    self.categoryTableView.reloadData()
                 }else{
                     //TODO: Show error
                     print("Item category deleting")

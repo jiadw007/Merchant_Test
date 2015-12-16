@@ -18,8 +18,8 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
         
         static let itemAttCellIdentifier = "ItemAttCell"
         
-        static let itemAttArray = ["Name","Summary","Price", "Category"]
-        static let itemAttDetailsArray = ["add title here", "a longer description","$11.99","dinner"]
+        static let itemAttArray = ["Name","Summary","Price", "Discount", "Category"]
+        static let itemAttDetailsArray = ["add title here", "a longer description","$11.99","0.0","dinner"]
         
     }
     
@@ -33,7 +33,8 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
     
     @IBOutlet weak var categoryPickerViewToolbar: UIToolbar!
     
-    var itemPictureArray = [UIImage]()
+    @IBOutlet weak var addItemButton: UIBarButtonItem!
+    var itemImageArray = [UIImage]()
     
     var itemCategoryArray = [ItemCategory]()
     
@@ -41,6 +42,8 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
     
     //var newItem: Item!
     let defaults = NSUserDefaults.standardUserDefaults()
+    
+    var currentStore: Store!
     
     var newItemCategory: ItemCategory!
     
@@ -55,8 +58,22 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
         
             Utils.createPopupAlertView("Alert", message: "No item category", buttonTitle: "Cancel")
         }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidAppear", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidHide", name: UIKeyboardDidHideNotification, object: nil)
+        
     }
-
+    
+    func keyboardDidAppear(){
+        
+        self.addItemButton.enabled = false
+        self.addItemButton.tintColor = UIColor.clearColor()
+    }
+    
+    func keyboardDidHide(){
+        
+        self.addItemButton.enabled = true
+        self.addItemButton.tintColor = nil
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -69,7 +86,7 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
         return 1
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return NewItemStoryBoard.itemAttArray.count
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 45
@@ -88,7 +105,7 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! ItemAttTableViewCell
-        if indexPath.row == 3 {
+        if indexPath.row == 4 {
             self.view.endEditing(true)
             showPicker()
         }else{
@@ -112,9 +129,7 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
     
         let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         
-//        MerchantDataService.addItemPicture(newItem, itemImage: chosenImage)
-//        itemPictureArray = MerchantDataService.findAllItemPictureInItem(newItem).map{ItemPicture(pfObj: $0)}
-        itemPictureArray.append(chosenImage)
+        itemImageArray.append(chosenImage)
         itemPictureCollectionView.reloadData()
         dismissViewControllerAnimated(true, completion: nil)
         
@@ -126,13 +141,13 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
     
     // MARK: Collection View
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return itemPictureArray.count
+        return itemImageArray.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = itemPictureCollectionView.dequeueReusableCellWithReuseIdentifier("ItemPicCollectionViewCell", forIndexPath: indexPath) as! ItemPicCollectionViewCell
         let row = indexPath.row
-        let image = itemPictureArray[row]
+        let image = itemImageArray[row]
         cell.newItemPic.image = image
         return cell
     }
@@ -158,7 +173,7 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
         return itemCategoryArray[row].name
     }
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let cell = self.newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! ItemAttTableViewCell
+        let cell = self.newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 4, inSection: 0)) as! ItemAttTableViewCell
         cell.details.text = itemCategoryArray[row].name
         newItemCategory = itemCategoryArray[row]
     }
@@ -193,29 +208,29 @@ UIViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerContr
         let summary = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         var price = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         price = price?.substringFromIndex((price?.startIndex)!.advancedBy(1))
-//        self.newItem.name = name
-//        self.newItem.description = description
-//        self.newItem.price = Double(price!)
-        
-        //MerchantDataService.addItemInStore(name, description: description, category: self.newItemCategory, price: price, itemPictureArray: itemPictureArray)
-        //self.navigationController?.popViewControllerAnimated(true)
+        var discount = (newItemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         let item = Item()
         item.category = newItemCategory
         item.isActive = true
         item.name = name!
         item.price = Double(price!)!
         item.summary = summary
-        if let store = self.defaults.objectForKey("currentStore") as? Store{
-        
-            item.store = store
-
-        }
+        item.discount = Double(discount!)!
+        item.store = self.currentStore
         item.saveInBackgroundWithBlock{(success: Bool, error: NSError?) -> Void in
         
         
-        
             if (success){
-            
+                //TODO: Add item picture
+                for itemImage in self.itemImageArray{
+                
+                    let itemPicture = ItemPicture()
+                    itemPicture.picture = PFFile(data: UIImageJPEGRepresentation(itemImage, 0.5)!)
+                    itemPicture.item = item
+                    itemPicture.saveInBackground()
+                
+                }
+                self.defaults.setBool(true, forKey: "reloadStore")
                 self.navigationController?.popViewControllerAnimated(true)
             
             }else{

@@ -16,11 +16,11 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         
         static let itemAttCellIdentifier = "ItemAttCell"
         static let editItemDoneSegueIdentifier = "EditItemDone"
-        static let itemAttArray = ["Name","Summary","Price", "Category"]
+        static let itemAttArray = ["Name","Summary","Price", "Discount", "Category"]
     }
     
     
-    @IBOutlet weak var itemImageCollectionView: UICollectionView!
+    @IBOutlet weak var itemPictureCollectionView: UICollectionView!
     
     @IBOutlet weak var addItemPicButton: UIButton!
     
@@ -30,6 +30,8 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var categoryPickerViewToolbar: UIToolbar!
     
+    @IBOutlet weak var editItemButton: UIBarButtonItem!
+    
     var item: Item!
     
     var itemPictureArray: [ItemPicture]!
@@ -38,6 +40,9 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     
     let picker = UIImagePickerController()
     
+    var itemCategoryIndex : Int?
+    
+    let defaults = NSUserDefaults.standardUserDefaults()
     
     override func viewWillAppear(animated: Bool) {
         
@@ -52,10 +57,10 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         var error: NSError? = nil
         do{
             
-            let index = try itemCategoryArray.indexOf{$0.name ==  item.category.name}
+            self.itemCategoryIndex = try itemCategoryArray.indexOf{$0.objectId ==  item.category.objectId}
             //print(index)
             
-            categoryPickerView.selectRow(index!, inComponent: 0, animated: true)
+            categoryPickerView.selectRow(self.itemCategoryIndex!, inComponent: 0, animated: true)
             
         }catch let error1 as NSError{
             error = error1
@@ -64,7 +69,22 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
             
             print("\(error?.localizedDescription)")
         }
-        //print(itemCategoryArray)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidAppear", name: UIKeyboardDidShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardDidHide", name: UIKeyboardDidHideNotification, object: nil)
+    }
+    
+    
+    func keyboardDidAppear(){
+    
+        self.editItemButton.enabled = false
+        self.editItemButton.tintColor = UIColor.clearColor()
+    }
+    
+    func keyboardDidHide(){
+        
+        self.editItemButton.enabled = true
+        self.editItemButton.tintColor = nil
     }
     
     override func didReceiveMemoryWarning() {
@@ -73,13 +93,14 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func backToParentViewController(){
+        
         self.navigationController?.popViewControllerAnimated(true)
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return EditItemStoryBoard.itemAttArray.count
     }
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 45
@@ -97,7 +118,9 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         case 2:
             cell.details.text = "$\(item.price)"
         case 3:
-            cell.details.text = item.category.name
+            cell.details.text = "\(item.discount)"
+        case 4:
+            cell.details.text = itemCategoryArray[self.itemCategoryIndex!].name
             
         default:
             break
@@ -113,7 +136,7 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! ItemAttTableViewCell
-        if indexPath.row == 3 {
+        if indexPath.row == 4 {
             self.view.endEditing(true)
             showPicker()
         }else{
@@ -145,8 +168,7 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         
             if (success){
                 
-                self.itemPictureArray.append(itemPicture)
-                self.itemImageCollectionView.reloadData()
+                self.itemPictureCollectionView.reloadData()
 
             }else{
             //TODO: Show Error
@@ -168,7 +190,7 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = itemImageCollectionView.dequeueReusableCellWithReuseIdentifier("ItemPicCollectionViewCell", forIndexPath: indexPath) as! ItemPicCollectionViewCell
+        let cell = itemPictureCollectionView.dequeueReusableCellWithReuseIdentifier("ItemPicCollectionViewCell", forIndexPath: indexPath) as! ItemPicCollectionViewCell
         
         let row = indexPath.row
         
@@ -217,7 +239,7 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         return itemCategoryArray[row].name
     }
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let cell = self.itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as! ItemAttTableViewCell
+        let cell = self.itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 4, inSection: 0)) as! ItemAttTableViewCell
         cell.details.text = itemCategoryArray[row].name
         item.category = itemCategoryArray[row]
     }
@@ -248,14 +270,12 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     @IBAction func backToParentViewController(sender: UIBarButtonItem) {
        
         
+        
         let name = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         let summary = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         var price = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 2, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         price = price?.substringFromIndex((price?.startIndex)!.advancedBy(1))
-        //self.item.name = name!
-        //self.item.summary = summary!
-        //self.item.price = Double(price!)!
-        
+        var discount = (itemTableView.cellForRowAtIndexPath(NSIndexPath(forRow: 3, inSection: 0)) as? ItemAttTableViewCell)?.details.text
         //self.item.updateItem()
         let query = Item.query()!
         query.getObjectInBackgroundWithId(self.item.objectId!){(itemObject: PFObject?, error: NSError?) -> Void in
@@ -267,7 +287,12 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
                 
                 itemObject["name"] = name!
                 itemObject["summary"] = summary!
+                itemObject["category"] = self.item.category
+                itemObject["discount"] = Double(discount!)!
                 itemObject["price"] = Double(price!)!
+                
+                self.defaults.setBool(true, forKey: "reloadItem")
+                self.defaults.setBool(true, forKey: "reloadStore")
                 itemObject.saveInBackground()
                 self.navigationController?.popViewControllerAnimated(true)
             }
