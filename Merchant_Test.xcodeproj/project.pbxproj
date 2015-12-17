@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		368BD6E33D28E7BCF45E5E9C /* Pods_Merchant_Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 718E0C5C306D6AE4823B4E82 /* Pods_Merchant_Test.framework */; };
-		DB1D743B1BE85D86008F23ED /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1D743A1BE85D86008F23ED /* Alert.swift */; };
 		DB1D743D1BE86116008F23ED /* Warning.png in Resources */ = {isa = PBXBuildFile; fileRef = DB1D743C1BE86116008F23ED /* Warning.png */; };
 		DB395E721BEB04BE004343DC /* ItemReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB395E711BEB04BE004343DC /* ItemReview.swift */; };
 		DB395E741BEB0768004343DC /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB395E731BEB0768004343DC /* Store.swift */; };
@@ -29,7 +28,7 @@
 		DB65D4B61BE6BEF000957E53 /* Merchant_TestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65D4B51BE6BEF000957E53 /* Merchant_TestUITests.swift */; };
 		DB65D4C41BE6C63D00957E53 /* MoreTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65D4C31BE6C63D00957E53 /* MoreTableViewController.swift */; };
 		DB65D4C61BE7085900957E53 /* OrderPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65D4C51BE7085900957E53 /* OrderPageViewController.swift */; };
-		DB65D4C81BE7ABA800957E53 /* AlertTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65D4C71BE7ABA800957E53 /* AlertTableCell.swift */; };
+		DB65D4C81BE7ABA800957E53 /* ServiceTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65D4C71BE7ABA800957E53 /* ServiceTableCell.swift */; };
 		DB65D4CA1BE7F31500957E53 /* Red Dragon Roll.png in Resources */ = {isa = PBXBuildFile; fileRef = DB65D4C91BE7F31500957E53 /* Red Dragon Roll.png */; };
 		DB65D4CC1BE7F97C00957E53 /* OrderTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65D4CB1BE7F97C00957E53 /* OrderTableCell.swift */; };
 		DB65D4CE1BE7FDA700957E53 /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB65D4CD1BE7FDA700957E53 /* Order.swift */; };
@@ -86,7 +85,6 @@
 /* Begin PBXFileReference section */
 		718E0C5C306D6AE4823B4E82 /* Pods_Merchant_Test.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Merchant_Test.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A64BEB6E59440FC480E06171 /* Pods-Merchant_Test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Merchant_Test.release.xcconfig"; path = "Pods/Target Support Files/Pods-Merchant_Test/Pods-Merchant_Test.release.xcconfig"; sourceTree = "<group>"; };
-		DB1D743A1BE85D86008F23ED /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		DB1D743C1BE86116008F23ED /* Warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Warning.png; sourceTree = "<group>"; };
 		DB395E711BEB04BE004343DC /* ItemReview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemReview.swift; sourceTree = "<group>"; };
 		DB395E731BEB0768004343DC /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
@@ -113,7 +111,7 @@
 		DB65D4B71BE6BEF000957E53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB65D4C31BE6C63D00957E53 /* MoreTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreTableViewController.swift; sourceTree = "<group>"; };
 		DB65D4C51BE7085900957E53 /* OrderPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderPageViewController.swift; sourceTree = "<group>"; };
-		DB65D4C71BE7ABA800957E53 /* AlertTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertTableCell.swift; sourceTree = "<group>"; };
+		DB65D4C71BE7ABA800957E53 /* ServiceTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceTableCell.swift; sourceTree = "<group>"; };
 		DB65D4C91BE7F31500957E53 /* Red Dragon Roll.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Red Dragon Roll.png"; sourceTree = "<group>"; };
 		DB65D4CB1BE7F97C00957E53 /* OrderTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderTableCell.swift; sourceTree = "<group>"; };
 		DB65D4CD1BE7FDA700957E53 /* Order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
@@ -209,7 +207,6 @@
 			isa = PBXGroup;
 			children = (
 				DB7948FC1C10025400969F40 /* MerchantBaseModel.swift */,
-				DB1D743A1BE85D86008F23ED /* Alert.swift */,
 				DB65D4CD1BE7FDA700957E53 /* Order.swift */,
 				DB395E711BEB04BE004343DC /* ItemReview.swift */,
 				DB9A583D1BE95EFF006C9804 /* Item.swift */,
@@ -228,7 +225,7 @@
 				DB395E7D1BEBDDD8004343DC /* ItemPicCollectionViewCell.swift */,
 				DB9A583F1BE95F20006C9804 /* ItemCollectionViewCell.swift */,
 				DB65D4CB1BE7F97C00957E53 /* OrderTableCell.swift */,
-				DB65D4C71BE7ABA800957E53 /* AlertTableCell.swift */,
+				DB65D4C71BE7ABA800957E53 /* ServiceTableCell.swift */,
 				DB395E7F1BEE95FC004343DC /* ItemAttTableViewCell.swift */,
 				DB395E871BF0EC1D004343DC /* ItemReviewTableViewCell.swift */,
 			);
@@ -539,7 +536,7 @@
 				DB7948F91C0F9CCB00969F40 /* StoreCategory.swift in Sources */,
 				DB9A583E1BE95EFF006C9804 /* Item.swift in Sources */,
 				DB7948F71C0F972B00969F40 /* ItemPicture.swift in Sources */,
-				DB65D4C81BE7ABA800957E53 /* AlertTableCell.swift in Sources */,
+				DB65D4C81BE7ABA800957E53 /* ServiceTableCell.swift in Sources */,
 				DB395E741BEB0768004343DC /* Store.swift in Sources */,
 				DB65D4C61BE7085900957E53 /* OrderPageViewController.swift in Sources */,
 				DB7948FD1C10025400969F40 /* MerchantBaseModel.swift in Sources */,
@@ -551,7 +548,6 @@
 				DB65D4961BE6BEEF00957E53 /* AppDelegate.swift in Sources */,
 				DB395E881BF0EC1D004343DC /* ItemReviewTableViewCell.swift in Sources */,
 				DB9A58401BE95F20006C9804 /* ItemCollectionViewCell.swift in Sources */,
-				DB1D743B1BE85D86008F23ED /* Alert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

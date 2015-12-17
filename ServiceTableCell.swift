@@ -8,11 +8,11 @@
 
 import UIKit
 
-class AlertTableCell: UITableViewCell{
+class ServiceTableCell: UITableViewCell{
 
-    @IBOutlet weak var alertImageView: UIImageView!
+    @IBOutlet weak var serviceImageView: UIImageView!
     
-    @IBOutlet weak var alertTimeLabel: UILabel!
+    @IBOutlet weak var serviceTimeLabel: UILabel!
 
     @IBOutlet weak var tableNoLabel: UILabel!
 

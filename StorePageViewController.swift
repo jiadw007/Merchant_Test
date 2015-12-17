@@ -30,6 +30,8 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     
     @IBOutlet weak var itemCollectionView: UICollectionView!
     
+    @IBOutlet weak var storeNameLabel: UILabel!
+    
     private struct StorePageStoryBoard{
     
         static let categorySegueIdentifier = "showItemCateogries"
@@ -79,6 +81,7 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                 if let store = object as? Store{
                     self.currentStore = store
                     //self.defaults.setObject(self.currentStore, forKey: "currentStore")
+                    self.storeNameLabel.text = self.currentStore.name
                     //TODO: Load Store Logo
                     self.loadStoreLogo()
                     //TODO: Load All Items
@@ -96,25 +99,16 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     
         if self.currentStore != nil{
             
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            let imageFile = self.currentStore.logo
+            imageFile.getDataInBackgroundWithBlock{ (data: NSData? , error : NSError?) -> Void in
+            
+                if error == nil{
                 
-                let imageFile = self.currentStore.logo
-                var error:NSError? = nil
-                do{
-                    
-                    let image = UIImage(data: try imageFile!.getData())
-                    dispatch_async(dispatch_get_main_queue()) {
-                        if true {
-                           self.storeLogoImageView.image = image
-                        }
-                    }
-                    
-                }catch let error1 as NSError {
-                    error = error1
+                    self.storeLogoImageView.image = UIImage(data: data!)
+        
                 }
-                if (error != nil) {
-                    print("\(error?.localizedDescription)")
-                }
+            
+            
             }
             
             
@@ -125,7 +119,9 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     func loadAllItem(){
         
         if self.currentStore != nil{
+            //print("load")
             let query = Item.query()!
+            
             query.whereKey("store", equalTo: self.currentStore)
             query.includeKey("category.store.category")
             query.includeKey("store.category")
@@ -136,7 +132,8 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                 if error == nil{
                 
                     if let objects = objects as? [Item]{
-                    
+                        
+
                         self.itemArray = objects
                         self.itemCollectionView.reloadData()
 
@@ -197,43 +194,69 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(StorePageStoryBoard.itemCollectionCellReuseIdentifier, forIndexPath: indexPath) as! ItemCollectionViewCell
         let item = self.itemArray[indexPath.row]
-        var itemImageArray = [UIImage]()
+        //var itemImageArray = [UIImage]()
         let query = ItemPicture.query()!
         query.whereKey("item", equalTo: item)
         query.orderByAscending("updatedAt")
-        query.findObjectsInBackgroundWithBlock{(objects: [PFObject]?, error: NSError?) -> Void in
-        
-            if error == nil{
+        query.getFirstObjectInBackgroundWithBlock{(object : PFObject?, error: NSError?) -> Void in
             
-                if let objects = objects as? [ItemPicture]{
+            if error == nil {
+            
+                if let object = object as? ItemPicture{
+                
+                    let imageFile = object.picture
                     
-                    for object in objects{
-                    
-                        let imageFile = object.picture
-                        var error:NSError? = nil
-                        do{
-                            
-                            let image = UIImage(data: try imageFile!.getData())
-                            itemImageArray.append(image!)
-                            
-                        }catch let error1 as NSError {
-                            error = error1
-                        }
-                        if (error != nil) {
-                            print("\(error?.localizedDescription)")
+                    imageFile.getDataInBackgroundWithBlock{(data: NSData?, error: NSError?) -> Void in
+                        
+                        if error == nil{
+                        
+                            let image = UIImage(data: data!)
+                            cell.itemImageView.image = image
+                        
                         }
                         
                     }
-                    
-                    cell.itemImageView.animationImages = itemImageArray
-                    cell.itemImageView.animationDuration = NSTimeInterval(6.0 * Double(itemImageArray.count))
-                    print("\(item.name) delay read")
-                    cell.itemImageView.startAnimating()
+                
                 }
             
-            
             }
+        
+        
+        
         }
+//        query.findObjectsInBackgroundWithBlock{(objects: [PFObject]?, error: NSError?) -> Void in
+//        
+//            if error == nil{
+//            
+//                if let objects = objects as? [ItemPicture]{
+//                    
+//                    for object in objects{
+//                    
+//                        let imageFile = object.picture
+//                        var error:NSError? = nil
+//                        do{
+//                            
+//                            let image = UIImage(data: try imageFile!.getData())
+//                            itemImageArray.append(image!)
+//                            
+//                        }catch let error1 as NSError {
+//                            error = error1
+//                        }
+//                        if (error != nil) {
+//                            print("\(error?.localizedDescription)")
+//                        }
+//                        
+//                    }
+//                    
+//                    cell.itemImageView.animationImages = itemImageArray
+//                    cell.itemImageView.animationDuration = NSTimeInterval(6.0 * Double(itemImageArray.count))
+//                    print("\(item.name) delay read")
+//                    cell.itemImageView.startAnimating()
+//                }
+//            
+//            
+//            }
+//        }
        
         cell.itemTitle.text = item.name
         

@@ -41,8 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Test Merchant Sign In
         MerchantDataService.merchantSignIn("merchant", password: "testonly")
         
-        
-        
     }
 
     func applicationWillTerminate(application: UIApplication) {

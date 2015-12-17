@@ -31,6 +31,8 @@ class Order : PFObject, PFSubclassing{
     @NSManaged var status: String
     @NSManaged var user: PFUser!
     @NSManaged var item: Item!
-    @NSManaged var table: String
-
+    @NSManaged var tableNo: String
+    @NSManaged var summary: String
+    @NSManaged var price: Double
+    @NSManaged var store: Store!
 }
