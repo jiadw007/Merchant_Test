@@ -12,9 +12,9 @@ class MoreTableViewController: UITableViewController {
     
     private struct MoreTableStoryBoard{
     
-        static let staticTestData = ["Loyalty Customer List", "Reward/Loyalty Program", "Deposit Account", "Businees Info", "Employees", "Shop notice", "Help & Feedback","Log Out"]
-        static let cellReuseIdentifier = "MoreTableCellIndentifier"
-        static let segueIdentifier = "MoreDetails"
+        static let staticTestData = ["Loyalty Customer List", "Reward/Loyalty Program", "Deposit Account", "Businees Info", "Employees", "Merchant Notice", "Help & Feedback","Log Out"]
+        static let cellReuseIdentifier = "MoreTableCell"
+        
     
     }
 
@@ -51,23 +51,66 @@ class MoreTableViewController: UITableViewController {
 
         // Configure the cell...
         cell.textLabel?.text = MoreTableStoryBoard.staticTestData[indexPath.row]
-
+        
         return cell
+    }
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        performSegueWithIdentifier((cell?.textLabel?.text)!, sender: self)
+        
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == MoreTableStoryBoard.segueIdentifier{
-            //print("acda")
-            let cell = sender as! UITableViewCell
-            if let mdvc = segue.destinationViewController as? UIViewController{
-                
-                let row = self.tableView.indexPathForCell(cell)!.row
+        if segue.identifier == "Merchant Notice"{
+        
+            if let dest = segue.destinationViewController  as? ShopNoticeViewController{
+            
                 let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
                 navigationItem.backBarButtonItem = backItem
-                mdvc.navigationItem.title = MoreTableStoryBoard.staticTestData[row]
+                dest.title = segue.identifier
+            
+            }
+        
+        } else if segue.identifier == "Help & Feedback"{
+        
+            if let dest = segue.destinationViewController  as? FeedbackViewController{
+                
+                let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+                navigationItem.backBarButtonItem = backItem
+                dest.title = segue.identifier
+                
+            }
+        
+        } else if segue.identifier == "Deposit Account"{
+            
+            if let dest = segue.destinationViewController  as? DepositAccountViewController{
+                
+                let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+                navigationItem.backBarButtonItem = backItem
+                dest.title = segue.identifier
+                
             }
             
+        } else if segue.identifier == "Loyalty Customer List"{
+            
+            if let dest = segue.destinationViewController  as? LoyaltyCustomerTableViewController{
+                
+                let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+                navigationItem.backBarButtonItem = backItem
+                dest.title = segue.identifier
+                
+            }
+            
+        }else if segue.identifier == "Reward/Loyalty Program"{
+            
+            if let dest = segue.destinationViewController  as? RewardsViewController{
+                
+                let backItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: nil, action: nil)
+                navigationItem.backBarButtonItem = backItem
+                dest.title = segue.identifier
+                
+            }
             
         }
         

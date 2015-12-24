@@ -32,6 +32,9 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var editItemButton: UIBarButtonItem!
     
+    
+    @IBOutlet weak var deleteItemButton: UIButton!
+    
     var item: Item!
     
     var itemPictureArray: [ItemPicture]!
@@ -96,6 +99,10 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.navigationController?.popViewControllerAnimated(true)
     }
+    
+    
+    
+    // MARK: - Table View
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -300,6 +307,39 @@ class EditItemViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
     }
+    
+    @IBAction func deleteItem(sender: UIButton) {
+        
+        let alertController = UIAlertController(title: "Delete Item", message: "Do you want to delete this item?", preferredStyle: .Alert)
+        let cancelAction = UIAlertAction(title: "No", style: UIAlertActionStyle.Cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        
+        let deleteAction = UIAlertAction(title: "Yes", style: UIAlertActionStyle.Default){ action in
+            
+            let query = Item.query()!
+    
+            query.getObjectInBackgroundWithId(self.item.objectId!){(object: PFObject?, error: NSError?) -> Void in
+    
+                if error == nil{
+    
+                    if let itemObject = object as? Item{
+                        self.defaults.setBool(true, forKey: "reloadStore")
+                        itemObject.deleteInBackground()
+    
+                        self.performSegueWithIdentifier("Delete Item", sender: self)
+                    }
+                
+                
+                }
+                
+            }
+        
+        }
+        alertController.addAction(deleteAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
+        
+    }
+    
     
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation

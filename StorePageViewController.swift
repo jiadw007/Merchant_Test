@@ -211,8 +211,9 @@ class StorePageViewController: UIViewController, UICollectionViewDelegate, UICol
                         if error == nil{
                         
                             let image = UIImage(data: data!)
-                            cell.itemImageView.image = image
-                        
+                            dispatch_async(dispatch_get_main_queue()){
+                                cell.itemImageView.image = image
+                            }
                         }
                         
                     }

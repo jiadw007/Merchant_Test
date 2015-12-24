@@ -165,9 +165,13 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
                     
                     
                     }
-                    self.itemImage.animationImages = itemImageArray
-                    self.itemImage.animationDuration = 6.0 * Double(itemImageArray.count)
-                    self.itemImage.startAnimating()
+                    dispatch_async(dispatch_get_main_queue()){
+                    
+                        self.itemImage.animationImages = itemImageArray
+                        self.itemImage.animationDuration = 6.0 * Double(itemImageArray.count)
+                        self.itemImage.startAnimating()
+                    }
+                    
                 }
             
             
@@ -195,18 +199,29 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
             
             
                 if let objects = objects as? [ItemReview]{
-                
+                    
                     self.itemReviewArray = objects
                     
-                    var reviewPointsSum = 0.0
+                    if self.itemReviewArray.count != 0{
                     
-                    for review in self.itemReviewArray{
+                        var reviewPointsSum = 0.0
                         
-                        reviewPointsSum += Double(review.rating)
-                        
+                        for review in self.itemReviewArray{
+                            
+                            reviewPointsSum += Double(review.rating)
+                            
+                        }
+                        self.averagePoints.text = String(format: "%.1f", reviewPointsSum / Double(self.itemReviewArray.count))
+                        self.starRating.rating = Float(self.averagePoints.text!)!
+                    
+                    
+                    }else{
+                    
+                        self.averagePoints.text = "0.0"
+                        self.starRating.rating = 0
                     }
-                    self.averagePoints.text = String(format: "%.1f", reviewPointsSum / Double(self.itemReviewArray.count))
-                    self.starRating.rating = Float(self.averagePoints.text!)!
+                    
+                    
                     self.starRating.setNeedsDisplay()
                     self.reviewTableView.reloadData()
                 }
@@ -235,7 +250,9 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
                 let image = UIImage(data: try itemPicture.picture.getData())
                 dispatch_async(dispatch_get_main_queue()) {
                     if true {
-                        self.itemImage.image = image
+                        dispatch_async(dispatch_get_main_queue()){
+                            self.itemImage.image = image
+                        }
                     }
                 }
                 
@@ -280,7 +297,9 @@ class ItemDetailsViewController: UIViewController, UITableViewDataSource, UITabl
                     var error:NSError? = nil
                     do{
                         let image = UIImage(data: try imageFile.getData())
-                        cell.userImage.image = image
+                        dispatch_async(dispatch_get_main_queue()){
+                            cell.userImage.image = image
+                        }
                     }catch let error1 as NSError {
                         error = error1
                     }

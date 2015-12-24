@@ -61,6 +61,14 @@
 		DB9A583C1BE91274006C9804 /* NewItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A583B1BE91274006C9804 /* NewItemViewController.swift */; };
 		DB9A583E1BE95EFF006C9804 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A583D1BE95EFF006C9804 /* Item.swift */; };
 		DB9A58401BE95F20006C9804 /* ItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A583F1BE95F20006C9804 /* ItemCollectionViewCell.swift */; };
+		DBE80F8B1C2A488900A13A20 /* MY TALACE page background pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DBE80F8A1C2A488900A13A20 /* MY TALACE page background pic.png */; };
+		DBE86F6E1C2BCD3800C56CB5 /* RewardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE86F6D1C2BCD3800C56CB5 /* RewardsViewController.swift */; };
+		DBFD4EBC1C2B2A26009B8596 /* ShopNoticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFD4EBB1C2B2A26009B8596 /* ShopNoticeViewController.swift */; };
+		DBFD4EBE1C2B33E7009B8596 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFD4EBD1C2B33E7009B8596 /* FeedbackViewController.swift */; };
+		DBFD4EC01C2B3C43009B8596 /* DepositAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFD4EBF1C2B3C43009B8596 /* DepositAccountViewController.swift */; };
+		DBFD4EC21C2B408E009B8596 /* AccountDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFD4EC11C2B408E009B8596 /* AccountDetailsViewController.swift */; };
+		DBFD4EC41C2B4426009B8596 /* sample-check.png in Resources */ = {isa = PBXBuildFile; fileRef = DBFD4EC31C2B4426009B8596 /* sample-check.png */; };
+		DBFD4ECA1C2BC649009B8596 /* LoyaltyCustomerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFD4EC91C2BC649009B8596 /* LoyaltyCustomerTableViewController.swift */; };
 		DBFFAE7B1C17290A004010D9 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFFAE7A1C17290A004010D9 /* Utils.swift */; };
 		DBFFAE851C1910AC004010D9 /* EDStarRating.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBFFAE841C1910AC004010D9 /* EDStarRating.framework */; };
 /* End PBXBuildFile section */
@@ -144,6 +152,14 @@
 		DB9A583B1BE91274006C9804 /* NewItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemViewController.swift; sourceTree = "<group>"; };
 		DB9A583D1BE95EFF006C9804 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		DB9A583F1BE95F20006C9804 /* ItemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCollectionViewCell.swift; sourceTree = "<group>"; };
+		DBE80F8A1C2A488900A13A20 /* MY TALACE page background pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MY TALACE page background pic.png"; sourceTree = "<group>"; };
+		DBE86F6D1C2BCD3800C56CB5 /* RewardsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewardsViewController.swift; sourceTree = "<group>"; };
+		DBFD4EBB1C2B2A26009B8596 /* ShopNoticeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopNoticeViewController.swift; sourceTree = "<group>"; };
+		DBFD4EBD1C2B33E7009B8596 /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		DBFD4EBF1C2B3C43009B8596 /* DepositAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositAccountViewController.swift; sourceTree = "<group>"; };
+		DBFD4EC11C2B408E009B8596 /* AccountDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountDetailsViewController.swift; sourceTree = "<group>"; };
+		DBFD4EC31C2B4426009B8596 /* sample-check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sample-check.png"; sourceTree = "<group>"; };
+		DBFD4EC91C2BC649009B8596 /* LoyaltyCustomerTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoyaltyCustomerTableViewController.swift; sourceTree = "<group>"; };
 		DBFFAE7A1C17290A004010D9 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		DBFFAE841C1910AC004010D9 /* EDStarRating.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EDStarRating.framework; path = "Pods/../build/Debug-iphoneos/EDStarRating.framework"; sourceTree = "<group>"; };
 		EC8A6DDCFF83A5EDBE05664C /* Pods-Merchant_Test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Merchant_Test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Merchant_Test/Pods-Merchant_Test.debug.xcconfig"; sourceTree = "<group>"; };
@@ -238,13 +254,9 @@
 				DB65D4951BE6BEEF00957E53 /* AppDelegate.swift */,
 				DB65D4991BE6BEEF00957E53 /* Main.storyboard */,
 				DB65D4C51BE7085900957E53 /* OrderPageViewController.swift */,
-				DB9A583B1BE91274006C9804 /* NewItemViewController.swift */,
-				DB9A58391BE91234006C9804 /* CategoryViewController.swift */,
-				DB395E811BEF1AA8004343DC /* EditItemViewController.swift */,
-				DB395E761BEB0C42004343DC /* ItemDetailsViewController.swift */,
-				DB9A58371BE90F08006C9804 /* StorePageViewController.swift */,
-				DB65D4C31BE6C63D00957E53 /* MoreTableViewController.swift */,
 				DBFFAE7A1C17290A004010D9 /* Utils.swift */,
+				DBFD4EB91C2B29FF009B8596 /* Store */,
+				DBFD4EBA1C2B2A09009B8596 /* More Table */,
 				DB7948F11C0F7E8300969F40 /* Parse Data Service */,
 				DB395E7A1BEBDB5F004343DC /* Table Cell */,
 				DB395E751BEB0776004343DC /* Model */,
@@ -271,6 +283,8 @@
 			isa = PBXGroup;
 			children = (
 				DB65D4C91BE7F31500957E53 /* Red Dragon Roll.png */,
+				DBE80F8A1C2A488900A13A20 /* MY TALACE page background pic.png */,
+				DBFD4EC31C2B4426009B8596 /* sample-check.png */,
 				DB1D743C1BE86116008F23ED /* Warning.png */,
 				DB65D4CF1BE80D8700957E53 /* Spicy Tuna.png */,
 				DB395E891BF12168004343DC /* customer icon.jpeg */,
@@ -307,6 +321,32 @@
 				DB7948F21C0F801A00969F40 /* MerchnatDataService.swift */,
 			);
 			name = "Parse Data Service";
+			sourceTree = "<group>";
+		};
+		DBFD4EB91C2B29FF009B8596 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				DB9A583B1BE91274006C9804 /* NewItemViewController.swift */,
+				DB9A58391BE91234006C9804 /* CategoryViewController.swift */,
+				DB395E811BEF1AA8004343DC /* EditItemViewController.swift */,
+				DB395E761BEB0C42004343DC /* ItemDetailsViewController.swift */,
+				DB9A58371BE90F08006C9804 /* StorePageViewController.swift */,
+			);
+			name = Store;
+			sourceTree = "<group>";
+		};
+		DBFD4EBA1C2B2A09009B8596 /* More Table */ = {
+			isa = PBXGroup;
+			children = (
+				DB65D4C31BE6C63D00957E53 /* MoreTableViewController.swift */,
+				DBE86F6D1C2BCD3800C56CB5 /* RewardsViewController.swift */,
+				DBFD4EC11C2B408E009B8596 /* AccountDetailsViewController.swift */,
+				DBFD4EBF1C2B3C43009B8596 /* DepositAccountViewController.swift */,
+				DBFD4EBD1C2B33E7009B8596 /* FeedbackViewController.swift */,
+				DBFD4EBB1C2B2A26009B8596 /* ShopNoticeViewController.swift */,
+				DBFD4EC91C2BC649009B8596 /* LoyaltyCustomerTableViewController.swift */,
+			);
+			name = "More Table";
 			sourceTree = "<group>";
 		};
 		E40108F4DD6A0C29FE184525 /* Frameworks */ = {
@@ -445,11 +485,13 @@
 				DB65D4A01BE6BEF000957E53 /* LaunchScreen.storyboard in Resources */,
 				DB65D4CA1BE7F31500957E53 /* Red Dragon Roll.png in Resources */,
 				DB395E8A1BF12168004343DC /* customer icon.jpeg in Resources */,
+				DBE80F8B1C2A488900A13A20 /* MY TALACE page background pic.png in Resources */,
 				DB1D743D1BE86116008F23ED /* Warning.png in Resources */,
 				DB65D4D01BE80D8700957E53 /* Spicy Tuna.png in Resources */,
 				DB395E791BEB1E76004343DC /* square299.png in Resources */,
 				DB65D49D1BE6BEF000957E53 /* Assets.xcassets in Resources */,
 				DB65D49B1BE6BEEF00957E53 /* Main.storyboard in Resources */,
+				DBFD4EC41C2B4426009B8596 /* sample-check.png in Resources */,
 				DB395E861BEFE0B2004343DC /* reveal-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -524,11 +566,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB65D4CE1BE7FDA700957E53 /* Order.swift in Sources */,
+				DBFD4EC21C2B408E009B8596 /* AccountDetailsViewController.swift in Sources */,
+				DBFD4ECA1C2BC649009B8596 /* LoyaltyCustomerTableViewController.swift in Sources */,
+				DBFD4EC01C2B3C43009B8596 /* DepositAccountViewController.swift in Sources */,
 				DB395E821BEF1AA8004343DC /* EditItemViewController.swift in Sources */,
+				DBFD4EBC1C2B2A26009B8596 /* ShopNoticeViewController.swift in Sources */,
 				DB9A583A1BE91234006C9804 /* CategoryViewController.swift in Sources */,
 				DB395E801BEE95FC004343DC /* ItemAttTableViewCell.swift in Sources */,
+				DBE86F6E1C2BCD3800C56CB5 /* RewardsViewController.swift in Sources */,
 				DB9A583C1BE91274006C9804 /* NewItemViewController.swift in Sources */,
 				DBFFAE7B1C17290A004010D9 /* Utils.swift in Sources */,
+				DBFD4EBE1C2B33E7009B8596 /* FeedbackViewController.swift in Sources */,
 				DB395E771BEB0C42004343DC /* ItemDetailsViewController.swift in Sources */,
 				DB65D4C41BE6C63D00957E53 /* MoreTableViewController.swift in Sources */,
 				DB7948F31C0F801A00969F40 /* MerchnatDataService.swift in Sources */,
