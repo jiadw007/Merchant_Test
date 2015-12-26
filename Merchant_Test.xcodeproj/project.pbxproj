@@ -63,6 +63,12 @@
 		DB9A58401BE95F20006C9804 /* ItemCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9A583F1BE95F20006C9804 /* ItemCollectionViewCell.swift */; };
 		DBE80F8B1C2A488900A13A20 /* MY TALACE page background pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DBE80F8A1C2A488900A13A20 /* MY TALACE page background pic.png */; };
 		DBE86F6E1C2BCD3800C56CB5 /* RewardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE86F6D1C2BCD3800C56CB5 /* RewardsViewController.swift */; };
+		DBE86F701C2E11D200C56CB5 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE86F6F1C2E11D200C56CB5 /* SignInViewController.swift */; };
+		DBE86F731C2E123400C56CB5 /* log-In background pic.png in Resources */ = {isa = PBXBuildFile; fileRef = DBE86F721C2E123400C56CB5 /* log-In background pic.png */; };
+		DBE86F751C2E123A00C56CB5 /* log-In_06.png in Resources */ = {isa = PBXBuildFile; fileRef = DBE86F741C2E123A00C56CB5 /* log-In_06.png */; };
+		DBE86F771C2E123E00C56CB5 /* log-In_03.png in Resources */ = {isa = PBXBuildFile; fileRef = DBE86F761C2E123E00C56CB5 /* log-In_03.png */; };
+		DBE86F791C2E1D2F00C56CB5 /* logo (1).png in Resources */ = {isa = PBXBuildFile; fileRef = DBE86F781C2E1D2F00C56CB5 /* logo (1).png */; };
+		DBE86F7B1C2E1D3A00C56CB5 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DBE86F7A1C2E1D3A00C56CB5 /* logo.jpg */; };
 		DBFD4EBC1C2B2A26009B8596 /* ShopNoticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFD4EBB1C2B2A26009B8596 /* ShopNoticeViewController.swift */; };
 		DBFD4EBE1C2B33E7009B8596 /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFD4EBD1C2B33E7009B8596 /* FeedbackViewController.swift */; };
 		DBFD4EC01C2B3C43009B8596 /* DepositAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFD4EBF1C2B3C43009B8596 /* DepositAccountViewController.swift */; };
@@ -154,6 +160,12 @@
 		DB9A583F1BE95F20006C9804 /* ItemCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		DBE80F8A1C2A488900A13A20 /* MY TALACE page background pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MY TALACE page background pic.png"; sourceTree = "<group>"; };
 		DBE86F6D1C2BCD3800C56CB5 /* RewardsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RewardsViewController.swift; sourceTree = "<group>"; };
+		DBE86F6F1C2E11D200C56CB5 /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		DBE86F721C2E123400C56CB5 /* log-In background pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "log-In background pic.png"; sourceTree = "<group>"; };
+		DBE86F741C2E123A00C56CB5 /* log-In_06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "log-In_06.png"; sourceTree = "<group>"; };
+		DBE86F761C2E123E00C56CB5 /* log-In_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "log-In_03.png"; sourceTree = "<group>"; };
+		DBE86F781C2E1D2F00C56CB5 /* logo (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo (1).png"; sourceTree = "<group>"; };
+		DBE86F7A1C2E1D3A00C56CB5 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
 		DBFD4EBB1C2B2A26009B8596 /* ShopNoticeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopNoticeViewController.swift; sourceTree = "<group>"; };
 		DBFD4EBD1C2B33E7009B8596 /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
 		DBFD4EBF1C2B3C43009B8596 /* DepositAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepositAccountViewController.swift; sourceTree = "<group>"; };
@@ -255,6 +267,7 @@
 				DB65D4991BE6BEEF00957E53 /* Main.storyboard */,
 				DB65D4C51BE7085900957E53 /* OrderPageViewController.swift */,
 				DBFFAE7A1C17290A004010D9 /* Utils.swift */,
+				DBE86F711C2E11DA00C56CB5 /* Account */,
 				DBFD4EB91C2B29FF009B8596 /* Store */,
 				DBFD4EBA1C2B2A09009B8596 /* More Table */,
 				DB7948F11C0F7E8300969F40 /* Parse Data Service */,
@@ -282,12 +295,17 @@
 		DB65D4941BE6BEEF00957E53 /* Merchant_Test */ = {
 			isa = PBXGroup;
 			children = (
+				DBE86F7A1C2E1D3A00C56CB5 /* logo.jpg */,
+				DBE86F781C2E1D2F00C56CB5 /* logo (1).png */,
 				DB65D4C91BE7F31500957E53 /* Red Dragon Roll.png */,
 				DBE80F8A1C2A488900A13A20 /* MY TALACE page background pic.png */,
 				DBFD4EC31C2B4426009B8596 /* sample-check.png */,
 				DB1D743C1BE86116008F23ED /* Warning.png */,
 				DB65D4CF1BE80D8700957E53 /* Spicy Tuna.png */,
 				DB395E891BF12168004343DC /* customer icon.jpeg */,
+				DBE86F721C2E123400C56CB5 /* log-In background pic.png */,
+				DBE86F761C2E123E00C56CB5 /* log-In_03.png */,
+				DBE86F741C2E123A00C56CB5 /* log-In_06.png */,
 				DB65D49C1BE6BEF000957E53 /* Assets.xcassets */,
 				DB395E851BEFE0B2004343DC /* reveal-icon.png */,
 				DB395E781BEB1E76004343DC /* square299.png */,
@@ -321,6 +339,14 @@
 				DB7948F21C0F801A00969F40 /* MerchnatDataService.swift */,
 			);
 			name = "Parse Data Service";
+			sourceTree = "<group>";
+		};
+		DBE86F711C2E11DA00C56CB5 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				DBE86F6F1C2E11D200C56CB5 /* SignInViewController.swift */,
+			);
+			name = Account;
 			sourceTree = "<group>";
 		};
 		DBFD4EB91C2B29FF009B8596 /* Store */ = {
@@ -482,12 +508,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBE86F771C2E123E00C56CB5 /* log-In_03.png in Resources */,
+				DBE86F751C2E123A00C56CB5 /* log-In_06.png in Resources */,
 				DB65D4A01BE6BEF000957E53 /* LaunchScreen.storyboard in Resources */,
 				DB65D4CA1BE7F31500957E53 /* Red Dragon Roll.png in Resources */,
 				DB395E8A1BF12168004343DC /* customer icon.jpeg in Resources */,
 				DBE80F8B1C2A488900A13A20 /* MY TALACE page background pic.png in Resources */,
 				DB1D743D1BE86116008F23ED /* Warning.png in Resources */,
+				DBE86F7B1C2E1D3A00C56CB5 /* logo.jpg in Resources */,
 				DB65D4D01BE80D8700957E53 /* Spicy Tuna.png in Resources */,
+				DBE86F731C2E123400C56CB5 /* log-In background pic.png in Resources */,
+				DBE86F791C2E1D2F00C56CB5 /* logo (1).png in Resources */,
 				DB395E791BEB1E76004343DC /* square299.png in Resources */,
 				DB65D49D1BE6BEF000957E53 /* Assets.xcassets in Resources */,
 				DB65D49B1BE6BEEF00957E53 /* Main.storyboard in Resources */,
@@ -593,6 +624,7 @@
 				DB395E721BEB04BE004343DC /* ItemReview.swift in Sources */,
 				DB395E841BEFDDF5004343DC /* CategoryTableViewCell.swift in Sources */,
 				DB9A58381BE90F08006C9804 /* StorePageViewController.swift in Sources */,
+				DBE86F701C2E11D200C56CB5 /* SignInViewController.swift in Sources */,
 				DB65D4961BE6BEEF00957E53 /* AppDelegate.swift in Sources */,
 				DB395E881BF0EC1D004343DC /* ItemReviewTableViewCell.swift in Sources */,
 				DB9A58401BE95F20006C9804 /* ItemCollectionViewCell.swift in Sources */,

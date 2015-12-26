@@ -27,10 +27,20 @@ class AccountDetailsViewController: UIViewController, UITextFieldDelegate {
     var scrollContentOffset: CGPoint!
     
     @IBOutlet weak var scrollView: UIScrollView!
+    override func viewWillAppear(animated: Bool) {
+        if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation){
+            
+            dispatch_async(dispatch_get_main_queue()){
+                var scrollPoint = CGPointMake(0, self.routingNumberTextField.frame.origin.y - 40)
+                self.scrollView.setContentOffset(scrollPoint, animated: true)
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "rotated", name: UIDeviceOrientationDidChangeNotification, object: nil)
         // Do any additional setup after loading the view.
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,19 +49,20 @@ class AccountDetailsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func rotated(){
-        
-        //self.scrollContentOffset = scrollView.contentOffset
-        if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation){
-        
-            var scrollPoint = CGPointMake(0, self.routingNumberTextField.frame.origin.y - 40)
-            scrollView.setContentOffset(scrollPoint, animated: true)
-        }
-        
-        if UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation){
+        dispatch_async(dispatch_get_main_queue()){
+            //self.scrollContentOffset = scrollView.contentOffset
+            if UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation){
             
-            var scrollPoint = CGPointMake(0, self.routingNumberTextField.frame.origin.y - 90)
-            scrollView.setContentOffset(scrollPoint, animated: true)
-        
+                var scrollPoint = CGPointMake(0, self.routingNumberTextField.frame.origin.y - 40)
+                self.scrollView.setContentOffset(scrollPoint, animated: true)
+            }
+            
+            if UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation){
+                
+                var scrollPoint = CGPointMake(0, self.routingNumberTextField.frame.origin.y - 90)
+                self.scrollView.setContentOffset(scrollPoint, animated: true)
+            
+            }
         }
     
     }
